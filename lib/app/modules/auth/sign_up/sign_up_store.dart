@@ -17,18 +17,15 @@ abstract class SignUpStoreBase with Store {
   AuthRepo _authRepo;
 
   FormGroup form = FormGroup({
-    'firstName': FormControl<String>(value: 'Nour',validators: [Validators.required]),
-    'lastName': FormControl<String>(value: 'Sleem',validators: [Validators.required]),
-    'email': FormControl<String>(value: 'Nour33166da1dda1@gmail.com',
+    'firstName': FormControl<String>(validators: [Validators.required]),
+    'lastName': FormControl<String>(validators: [Validators.required]),
+    'email': FormControl<String>(
         validators: [Validators.required, Validators.email]),
-    'password': FormControl<String>(value: '12345678',
+    'password': FormControl<String>(
         validators: [Validators.required, Validators.minLength(4)]),
     'workDomain': FormControl<WorkDomain>(validators: [Validators.required]),
-    'bio': FormControl<String>(value: 'Sorry',
-        validators: [Validators.required]),
-    'functionalName': FormControl<String>(
-        value: 'Mobile Developer',
-        validators: [Validators.required]),
+    'bio': FormControl<String>(validators: [Validators.required]),
+    'functionalName': FormControl<String>(validators: [Validators.required]),
   });
 
   SignUpStoreBase(this._authRepo) {
