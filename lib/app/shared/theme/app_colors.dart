@@ -12,4 +12,5 @@ class AppColors {
   static Color darkSubtitleColor = Colors.grey;
   static Color black = Colors.black;
   static Color white = Colors.white;
+  static Color gold = Color(0xffc8923c);
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:roadmap/app/shared/theme/theme.dart';
+
 import 'home_store.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,16 +15,21 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      drawer: Drawer(
+          child: Column(
+        children: [
+          SizedBox(height: 30,),
+          TextButton(
+            child: Text("Logout"),
+            onPressed: store.logout,
+          )
+        ],
+      )),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextButton(
-                onPressed: () =>
-                    CustomAppTheme.instance.changeTheme(context),
-                child: Text("Change Theme")),
-          ],
+          children: [Text("Roadmap Home")],
         ),
       ),
     );

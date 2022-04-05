@@ -4,7 +4,7 @@ import 'requests_interceptor.dart';
 
 class DioFactory {
   /* add project's baseUrl & apiUrl */
-  static const baseURL = '';
+  static const baseURL = 'https://roadmap-be.herokuapp.com';
   static const apiUrl = '$baseURL/';
 
   static Dio create() {

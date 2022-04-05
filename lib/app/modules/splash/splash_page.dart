@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:roadmap/app/shared/services/storage_service.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -13,8 +14,12 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then((value) {
-      Modular.to.pushReplacementNamed('/auth/');
+    Future.delayed(Duration(seconds: 2)).then((value) async {
+      final user = await SharedPreferencesHelper.getUser();
+      if (user != null)
+        Modular.to.pushReplacementNamed('/home/');
+      else
+        Modular.to.pushReplacementNamed('/auth/');
     });
   }
 

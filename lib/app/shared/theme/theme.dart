@@ -18,6 +18,32 @@ class CustomAppTheme {
       description: "Default App Light Theme",
       data: ThemeData.light().copyWith(
           primaryColor: AppColors.primary,
+          textButtonTheme: TextButtonThemeData(style: ButtonStyle(
+            textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                (Set<MaterialState> states) {
+              if (states.contains(MaterialState.pressed))
+                return boldStyle(fontSize: 15, color: AppColors.primary);
+              else if (states.contains(MaterialState.disabled))
+                return regularStyle(fontSize: 15, color: Colors.grey);
+              else
+                return TextStyle();
+            }),
+          )),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+              style: ButtonStyle(
+            elevation: MaterialStateProperty.all(4),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+              if (states.contains(MaterialState.pressed))
+                return AppColors.primary;
+              else if (states.contains(MaterialState.disabled))
+                return Colors.grey;
+              else
+                return AppColors.primary;
+            }),
+          )),
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
             elevation: MaterialStateProperty.all(4),
@@ -35,6 +61,9 @@ class CustomAppTheme {
           )),
           accentColor: AppColors.accent,
           inputDecorationTheme: InputDecorationTheme(
+              alignLabelWithHint: true,
+              floatingLabelStyle:
+                  regularStyle(fontSize: 15, color: AppColors.gold),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.primary),
                   borderRadius: BorderRadius.circular(15)),
@@ -83,7 +112,9 @@ class CustomAppTheme {
         headline6: regularStyle(
             color: isDark ? AppColors.white : AppColors.black, fontSize: 20),
         subtitle1: regularStyle(
-            color: isDark ? AppColors.white : Colors.grey, fontSize: 16),
+            color: isDark ? AppColors.white : Colors.black, fontSize: 16),
+        subtitle2:regularStyle(
+            color: isDark ? Colors.grey : Colors.grey, fontSize: 16),
         bodyText1: boldStyle(
             color: isDark ? AppColors.white : AppColors.black, fontSize: 18),
         bodyText2: regularStyle(
