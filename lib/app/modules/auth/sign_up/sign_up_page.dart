@@ -192,7 +192,13 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                                           : null,
                                                       label: Text(domain.text,
                                                           style: theme.textTheme
-                                                              .bodyText2));
+                                                              .bodyText2!
+                                                              .copyWith(
+                                                                  color: form.control('workDomain').value ==
+                                                                          domain
+                                                                      ? AppColors
+                                                                          .white
+                                                                      : null)));
                                                 }),
                                                 onTap: () {
                                                   store.setWorkDomain(domain);

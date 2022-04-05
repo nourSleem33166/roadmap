@@ -1,12 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:roadmap/app/shared/theme/app_colors.dart';
 import 'package:sizer/sizer.dart';
 import 'package:theme_provider/theme_provider.dart';
-
 import './shared/theme/theme.dart';
 
 // ignore: must_be_immutable
@@ -39,7 +38,7 @@ class AppWidget extends StatelessWidget {
             child: ThemeConsumer(
                 child: Builder(
                     builder: (themeContext) => MaterialApp(
-                            title: "Deepact",
+                            title: "Roadmap",
                             debugShowCheckedModeBanner: false,
                             builder: (context, child) {
                               child = botToastBuilder(context, child);
@@ -49,8 +48,7 @@ class AppWidget extends StatelessWidget {
                             localizationsDelegates:
                                 context.localizationDelegates,
                             supportedLocales: context.supportedLocales,
-                            locale: context.locale,
-                            color: AppColors.primary,
+                            locale: context.locale,color: AppColors.primary,
                             theme: ThemeProvider.themeOf(themeContext).data)
                         .modular()))));
   }
