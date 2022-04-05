@@ -1,0 +1,7 @@
+{
+  "app" : "Roadmap",
+  "emptyData" : "No Data",
+  "retry" : "Retry",
+  "unKnownError" : "Something went wrong",
+  "requiredField": "This field is required"
+}

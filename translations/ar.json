@@ -1,0 +1,8 @@
+{
+  "app" : "Roadmap",
+  "emptyData" : "لا يوجد بيانات",
+  "retry" : "إعادة المحاولة",
+  "unKnownError" : "حدث خطأ ما",
+  "requiredField": "This field is required"
+
+}
