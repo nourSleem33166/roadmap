@@ -1,7 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:roadmap/app/shared/services/storage_service.dart';
+
+import '../../../generated/assets.dart';
+import '../../../localizations/locale_keys.g.dart';
+import '../../shared/theme/app_colors.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -15,11 +22,11 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 2)).then((value) async {
-      final user = await SharedPreferencesHelper.getUser();
-      if (user != null)
-        Modular.to.pushReplacementNamed('/home/');
-      else
-        Modular.to.pushReplacementNamed('/auth/');
+      // final user = await SharedPreferencesHelper.getUser();
+      // if (user != null)
+      //   Modular.to.pushReplacementNamed('/home/');
+      // else
+      //   Modular.to.pushReplacementNamed('/auth/');
     });
   }
 
@@ -31,11 +38,12 @@ class _SplashPageState extends State<SplashPage> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'RoadMap',
-            style: Theme.of(context).textTheme.headline5!.copyWith(
-                fontSize: 45, letterSpacing: 8, color: theme.primaryColor),
-          ),
+          SvgPicture.asset(Assets.assetsRoadmap,height: 300,),
+          Text(LocaleKeys.app.tr(),
+              style: GoogleFonts.pacifico(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 50,
+                  color: AppColors.primary)),
           SizedBox(
             height: 5,
           ),
