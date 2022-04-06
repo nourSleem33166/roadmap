@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:roadmap/app/modules/auth/sign_up/sign_up_store.dart';
 import 'package:roadmap/app/shared/theme/app_colors.dart';
@@ -41,8 +42,10 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                           children: [
                             TextSpan(
                                 text: LocaleKeys.app.tr(),
-                                style: theme.textTheme.headline3!.copyWith(
-                                    color: AppColors.primary, fontSize: 35))
+                                style: GoogleFonts.pacifico(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 35,
+                                    color: AppColors.primary))
                           ])),
                   Image.asset(
                     Assets.assetsSignup,

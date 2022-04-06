@@ -31,8 +31,13 @@ class CustomAppTheme {
           )),
           outlinedButtonTheme: OutlinedButtonThemeData(
               style: ButtonStyle(
+            side: MaterialStateProperty.all(
+                BorderSide(color: Colors.grey, width: 1)),
             elevation: MaterialStateProperty.all(4),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                side: BorderSide(
+                  color: AppColors.primary,
+                ),
                 borderRadius: BorderRadius.circular(10))),
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
                 (Set<MaterialState> states) {
@@ -60,25 +65,27 @@ class CustomAppTheme {
             }),
           )),
           accentColor: AppColors.accent,
-          inputDecorationTheme: InputDecorationTheme(
+          inputDecorationTheme: InputDecorationTheme(focusColor: AppColors.primary,focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary,width: 2)),
               alignLabelWithHint: true,
               floatingLabelStyle:
-                  regularStyle(fontSize: 15, color: AppColors.gold),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.primary),
-                  borderRadius: BorderRadius.circular(15)),
-              focusColor: AppColors.primary,
-              disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.primary),
-                  borderRadius: BorderRadius.circular(15)),
-              fillColor: AppColors.primary,
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.primary),
-                  borderRadius: BorderRadius.circular(15)),
+                  regularStyle(fontSize: 15, color: AppColors.primary),
+              // focusedBorder: OutlineInputBorder(
+              //     borderSide: BorderSide(color: AppColors.primary),
+              //     borderRadius: BorderRadius.circular(15)),
+              // focusColor: AppColors.primary,
+              // disabledBorder: OutlineInputBorder(
+              //     borderSide: BorderSide(color: AppColors.primary),
+              //     borderRadius: BorderRadius.circular(15)),
+              // fillColor: AppColors.primary,
+              // enabledBorder: OutlineInputBorder(
+              //     borderSide: BorderSide(color: AppColors.primary),
+              //     borderRadius: BorderRadius.circular(15)),
               hoverColor: AppColors.primary,
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.primary),
-                  borderRadius: BorderRadius.circular(15))),
+              // border: OutlineInputBorder(
+              //     borderSide: BorderSide(color: AppColors.primary),
+              //     borderRadius: BorderRadius.circular(15))
+
+          ),
           indicatorColor: AppColors.primary,
           progressIndicatorTheme:
               ProgressIndicatorThemeData(color: AppColors.primary),
@@ -113,7 +120,7 @@ class CustomAppTheme {
             color: isDark ? AppColors.white : AppColors.black, fontSize: 20),
         subtitle1: regularStyle(
             color: isDark ? AppColors.white : Colors.black, fontSize: 16),
-        subtitle2:regularStyle(
+        subtitle2: regularStyle(
             color: isDark ? Colors.grey : Colors.grey, fontSize: 16),
         bodyText1: boldStyle(
             color: isDark ? AppColors.white : AppColors.black, fontSize: 18),
