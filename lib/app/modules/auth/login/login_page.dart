@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:roadmap/app/modules/auth/login/login_store.dart';
 import 'package:roadmap/app/shared/theme/app_colors.dart';
 import 'package:roadmap/localizations/locale_keys.g.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../../generated/assets.dart';
 
@@ -25,6 +28,9 @@ class _LoginPageState extends ModularState<LoginPage, LoginStore>
   @override
   void initState() {
     super.initState();
+    if (Platform.isAndroid) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
     _controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 600));
     Timer(Duration(milliseconds: 300), () {
@@ -138,6 +144,9 @@ class _LoginPageState extends ModularState<LoginPage, LoginStore>
                             SizedBox(
                               height: 5,
                             ),
+
+
+
                           ],
                         ),
                       ),

@@ -72,7 +72,7 @@ abstract class SignUpStoreBase with Store {
       showLoading();
       final userSignedUp = await _authRepo.signup(form.value);
       if (userSignedUp) {
-        Modular.to.pushReplacementNamed('/home/');
+        Modular.to.pushNamedAndRemoveUntil('/home/',(p0) => false);
       }
     } on AppException catch (e) {
       showToast(e.message);

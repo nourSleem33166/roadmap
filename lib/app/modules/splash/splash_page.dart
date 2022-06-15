@@ -22,11 +22,11 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 2)).then((value) async {
-      // final user = await SharedPreferencesHelper.getUser();
-      // if (user != null)
-      //   Modular.to.pushReplacementNamed('/home/');
-      // else
-      //   Modular.to.pushReplacementNamed('/auth/');
+      final user = await SharedPreferencesHelper.getUser();
+      if (user != null)
+        Modular.to.pushReplacementNamed('/home/');
+      else
+        Modular.to.pushReplacementNamed('/auth/');
     });
   }
 

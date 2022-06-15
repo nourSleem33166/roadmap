@@ -12,7 +12,7 @@ class DioFactory {
     final dio = Dio(baseOptions);
     dio.interceptors.add(
         LogInterceptor(requestBody: true, responseBody: true, request: true));
-    dio.interceptors.add(RequestHeadersInterceptors());
+    dio.interceptors.add(RequestHeadersInterceptors(dio));
     return dio;
   }
 }

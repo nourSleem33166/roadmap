@@ -6,10 +6,11 @@ part of 'sign_up_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SignUpStore on SignUpStoreBase, Store {
-  final _$signUpStateAtom = Atom(name: 'SignUpStoreBase.signUpState');
+  late final _$signUpStateAtom =
+      Atom(name: 'SignUpStoreBase.signUpState', context: context);
 
   @override
   ComponentState get signUpState {
@@ -24,7 +25,8 @@ mixin _$SignUpStore on SignUpStoreBase, Store {
     });
   }
 
-  final _$currentStepAtom = Atom(name: 'SignUpStoreBase.currentStep');
+  late final _$currentStepAtom =
+      Atom(name: 'SignUpStoreBase.currentStep', context: context);
 
   @override
   int get currentStep {
@@ -39,15 +41,16 @@ mixin _$SignUpStore on SignUpStoreBase, Store {
     });
   }
 
-  final _$getDomainsAsyncAction = AsyncAction('SignUpStoreBase.getDomains');
+  late final _$getDomainsAsyncAction =
+      AsyncAction('SignUpStoreBase.getDomains', context: context);
 
   @override
   Future<List<WorkDomain>> getDomains() {
     return _$getDomainsAsyncAction.run(() => super.getDomains());
   }
 
-  final _$SignUpStoreBaseActionController =
-      ActionController(name: 'SignUpStoreBase');
+  late final _$SignUpStoreBaseActionController =
+      ActionController(name: 'SignUpStoreBase', context: context);
 
   @override
   dynamic setWorkDomain(WorkDomain domain) {

@@ -22,7 +22,7 @@ class ComponentTemplate extends StatelessWidget {
       case ComponentState.NO_DATA:
         return Center(child: Text(LocaleKeys.emptyData.tr()));
       case ComponentState.ERROR:
-        return Container(
+        return Container(alignment: Alignment.center,
             height: 250,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
