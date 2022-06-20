@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 import 'app_colors.dart';
@@ -18,6 +19,7 @@ class CustomAppTheme {
       description: "Default App Light Theme",
       data: ThemeData.light().copyWith(
           primaryColor: AppColors.primary,
+          primaryTextTheme: GoogleFonts.openSansTextTheme(),
           textButtonTheme: TextButtonThemeData(style: ButtonStyle(
             textStyle: MaterialStateProperty.resolveWith<TextStyle>(
                 (Set<MaterialState> states) {

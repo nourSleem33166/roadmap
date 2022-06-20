@@ -2,13 +2,22 @@
 class Assets {
   Assets._();
 
+  static const String assetsAngry = 'assets/angry.gif';
   static const String assetsBackground = 'assets/background.png';
+  static const String assetsHaha = 'assets/haha.gif';
+  static const String assetsLeaf = 'assets/leaf.png';
+  static const String assetsLike = 'assets/like.gif';
   static const String assetsLogo1024x1024 = 'assets/logo_1024x1024.png';
   static const String assetsLogo710x599 = 'assets/logo_710x599.png';
   static const String assetsLogoForeground432x432 = 'assets/logo_foreground_432x432.png';
+  static const String assetsLove = 'assets/love.gif';
+  static const String assetsPiechart = 'assets/pie-chart.png';
   static const String assetsRoadmap = 'assets/roadmap.svg';
+  static const String assetsSad = 'assets/sad.gif';
   static const String assetsSignIn = 'assets/sign_in.svg';
   static const String assetsSignup = 'assets/signup.png';
+  static const String assetsTrack = 'assets/track.png';
   static const String assetsWelcome = 'assets/welcome.svg';
+  static const String assetsWow = 'assets/wow.gif';
 
 }

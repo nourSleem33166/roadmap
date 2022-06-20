@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:roadmap/app/shared/services/storage_service.dart';
 
 class RequestHeadersInterceptors extends Interceptor {
@@ -42,18 +43,30 @@ class RequestHeadersInterceptors extends Interceptor {
   }
 
   Future refreshToken() async {
-    final storageUser = await SharedPreferencesHelper.getUser();
-    final dio = Dio();
-    dio.options = BaseOptions(headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
-      'Authorization': 'Bearer ${storageUser?.refreshToken}'
-    });
-    final res = await dio.post(
-        'https://roadmap-be.herokuapp.com/auth/learner/refresh',
-        data: {});
-    storageUser?.refreshToken = res.data['refreshToken'];
-    storageUser?.accessToken = res.data['accessToken'];
-    await SharedPreferencesHelper.setUser(storageUser!);
+   try{
+     final storageUser = await SharedPreferencesHelper.getUser();
+     if(storageUser!=null){
+       final dio = Dio();
+       dio.options = BaseOptions(headers: {
+         "Access-Control-Allow-Origin": "*",
+         "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
+         'Authorization': 'Bearer ${storageUser.refreshToken}'
+       });
+
+       final res = await dio.post(
+           'https://roadmap-be.herokuapp.com/auth/learner/refresh',
+           data: {});
+       if (res.statusCode == 200) {
+         storageUser.refreshToken = res.data['refreshToken'];
+         storageUser.accessToken = res.data['accessToken'];
+         await SharedPreferencesHelper.setUser(storageUser);
+       } else
+         Modular.to.pushReplacementNamed('/auth/');
+     }
+   } catch (e){
+     Modular.to.pushReplacementNamed('/auth/');
+     await SharedPreferencesHelper.deleteUser();
+
+   }
   }
 }

@@ -12,13 +12,10 @@ class ExploreRepo {
 
   Future<PaginationModel<RoadmapModel>> getRoadmaps(
       int page, int pageSize) async {
-    try {
-      final result = await _dio.get("explore/roadmaps",
-          queryParameters: {'page': page, 'pageSize': pageSize});
-      return PaginationModel.fromJson(result.data, roadmapsModelFromJson);
-    } catch (e) {
-      throw AppExceptionHandler.instance.handleError(e);
-    }
+    final result = await _dio.get("explore/roadmaps",
+        queryParameters: {'page': page, 'pageSize': pageSize});
+
+    return PaginationModel.fromJson(result.data, roadmapsModelFromJson);
   }
 
   Future<PaginationModel<RoadmapModel>> searchRoamaps(
@@ -50,6 +47,7 @@ class ExploreRepo {
           queryParameters: {'page': page, 'pageSize': pageSize, 'text': text});
       return PaginationModel.fromJson(result.data, companiesModelFromJson);
     } catch (e) {
+      print("error is ${e.toString()}");
       throw AppExceptionHandler.instance.handleError(e);
     }
   }

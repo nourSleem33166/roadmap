@@ -11,20 +11,20 @@ User userFromJson(String str) => User.fromJson(json.decode(str));
 String userToJson(User data) => json.encode(data.toJson());
 
 class User {
-  User({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.password,
-    required this.workDomain,
-    required this.contacts,
-    required this.bio,
-    required this.functionalName,
-    required this.v,
-    required this.refreshToken,
-    required this.accessToken,
-  });
+  User(
+      {required this.id,
+      required this.firstName,
+      required this.lastName,
+      required this.email,
+      required this.password,
+      required this.workDomain,
+      required this.contacts,
+      required this.bio,
+      required this.functionalName,
+      required this.v,
+      required this.refreshToken,
+      required this.accessToken,
+      required this.personalImage});
 
   String id;
   String firstName;
@@ -38,21 +38,22 @@ class User {
   int? v;
   String refreshToken;
   String accessToken;
+  String? personalImage;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["_id"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        email: json["email"],
-        password: json["password"],
-        workDomain: WorkDomain.fromJson(json["workDomain"]),
-        contacts: List<dynamic>.from(json["contacts"].map((x) => x)),
-        bio: json["bio"],
-        functionalName: json["functionalName"],
-        v: json["__v"],
-        refreshToken: json["refreshToken"],
-        accessToken: json["accessToken"],
-      );
+      id: json["_id"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
+      email: json["email"],
+      password: json["password"],
+      workDomain: WorkDomain.fromJson(json["workDomain"]),
+      contacts: List<dynamic>.from(json["contacts"].map((x) => x)),
+      bio: json["bio"],
+      functionalName: json["functionalName"],
+      v: json["__v"],
+      refreshToken: json["refreshToken"],
+      accessToken: json["accessToken"],
+      personalImage: json['personalImage']);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -67,6 +68,7 @@ class User {
         "__v": v,
         "refreshToken": refreshToken,
         "accessToken": accessToken,
+        "personalImage": personalImage
       };
 
   @override

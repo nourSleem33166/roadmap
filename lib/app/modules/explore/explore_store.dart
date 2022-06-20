@@ -32,7 +32,6 @@ abstract class ExploreStoreBase with Store {
     companiesPagingController.addPageRequestListener((pageKey) {
       getCompanies(pageKey);
     });
-
   }
 
   @observable
@@ -61,22 +60,18 @@ abstract class ExploreStoreBase with Store {
   }
 
   Future<void> getRoadmaps(int pageKey, [String? text]) async {
-    try {
-      if (text == null || text == "")
-        roadmaps = await _repo.getRoadmaps(pageKey, 10);
-      else {
-        roadmapsPagingController.refresh();
-        roadmaps = await _repo.searchRoamaps(text, pageKey, 10);
-      }
+    if (text == null || text == "") {
+      roadmaps = await _repo.getRoadmaps(pageKey, 10);
+    } else {
+      roadmapsPagingController.refresh();
+      roadmaps = await _repo.searchRoamaps(text, pageKey, 10);
+    }
 
-      if (roadmaps.currentPage == roadmaps.totalPages) {
-        roadmapsPagingController.appendLastPage(roadmaps.items);
-      } else {
-        final nextPageKey = pageKey + 1;
-        roadmapsPagingController.appendPage(roadmaps.items, nextPageKey);
-      }
-    } catch (error) {
-      roadmapsPagingController.error = error;
+    if (roadmaps.currentPage == roadmaps.totalPages) {
+      roadmapsPagingController.appendLastPage(roadmaps.items);
+    } else {
+      final nextPageKey = pageKey + 1;
+      roadmapsPagingController.appendPage(roadmaps.items, nextPageKey);
     }
   }
 
@@ -109,6 +104,10 @@ abstract class ExploreStoreBase with Store {
 
   void goToCompanyDetails(CompanyModel company) {
     Modular.to.pushNamed('/home/companyDetails/', arguments: [company.id]);
+  }
+
+  void goToRoadmap(RoadmapModel roadmap) {
+    Modular.to.pushNamed('/home/roadmapDetails/', arguments: [roadmap.id]);
   }
 }
 

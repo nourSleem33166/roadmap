@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 lightStyle({required double? fontSize, required Color? color, double? height}) {
-  return GoogleFonts.poppins(
+  return GoogleFonts.openSans(
       fontSize: fontSize,
       color: color,
       height: height ?? height,
@@ -11,7 +11,7 @@ lightStyle({required double? fontSize, required Color? color, double? height}) {
 
 regularStyle(
     {required double? fontSize, required Color? color, double? height}) {
-  return GoogleFonts.poppins(
+  return GoogleFonts.openSans(
       fontSize: fontSize,
       color: color,
       height: height ?? height,
@@ -20,7 +20,7 @@ regularStyle(
 
 TextStyle boldStyle(
     {required double? fontSize, required Color? color, double? height}) {
-  return GoogleFonts.poppins(
+  return GoogleFonts.openSans(
       fontSize: fontSize,
       color: color,
       height: height ?? height,

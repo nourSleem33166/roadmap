@@ -42,7 +42,9 @@ class CompanyModel {
       id: json["_id"],
       name: json["name"],
       email: json["email"],
-      workDomain: WorkDomain.fromJson(json["workDomain"]),
+      workDomain: json['workDomain'] == null
+          ? null
+          : WorkDomain.fromJson(json["workDomain"]),
       website: json["website"],
       about: json["about"],
       workHours: json["workHours"],
