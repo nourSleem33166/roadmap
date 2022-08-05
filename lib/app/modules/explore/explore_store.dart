@@ -22,8 +22,7 @@ abstract class ExploreStoreBase with Store {
   final PagingController<int, CompanyModel> companiesPagingController =
       PagingController(firstPageKey: 1);
 
-  FloatingSearchBarController floatingSearchBarController =
-      FloatingSearchBarController();
+  FloatingSearchBarController floatingSearchBarController = FloatingSearchBarController();
 
   ExploreStoreBase(this._repo) {
     roadmapsPagingController.addPageRequestListener((pageKey) {
@@ -40,20 +39,6 @@ abstract class ExploreStoreBase with Store {
   @observable
   ComponentState pageState = ComponentState.FETCHING_DATA;
 
-  // Future getData() async {
-  //   try {
-  //     pageState = ComponentState.FETCHING_DATA;
-  //     if (selectedExplore == ExploreType.Roadmaps)
-  //       roadmaps = await _repo.getRoadmaps();
-  //     else
-  //       companies = await _repo.getCompanies();
-  //     pageState = ComponentState.SHOW_DATA;
-  //   } on AppException catch (e) {
-  //     showErrorToast(e.message);
-  //     pageState = ComponentState.ERROR;
-  //   }
-  // }
-
   @action
   void changeSelectedExplore(ExploreType value) {
     selectedExplore = value;
@@ -63,10 +48,8 @@ abstract class ExploreStoreBase with Store {
     if (text == null || text == "") {
       roadmaps = await _repo.getRoadmaps(pageKey, 10);
     } else {
-      roadmapsPagingController.refresh();
       roadmaps = await _repo.searchRoamaps(text, pageKey, 10);
     }
-
     if (roadmaps.currentPage == roadmaps.totalPages) {
       roadmapsPagingController.appendLastPage(roadmaps.items);
     } else {

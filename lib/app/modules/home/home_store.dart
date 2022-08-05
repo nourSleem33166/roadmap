@@ -9,7 +9,6 @@ class HomeStore = HomeStoreBase with _$HomeStore;
 abstract class HomeStoreBase with Store {
   HomeStoreBase() {
     Modular.to.navigate('/home/explore/');
-    print("hi");
   }
 
   @observable
@@ -21,13 +20,11 @@ abstract class HomeStoreBase with Store {
   }
 
   navigateToProfile() {
-    if (!Modular.to.path.contains('profile'))
-      Modular.to.navigate('/home/profile/');
+    if (!Modular.to.path.contains('profile')) Modular.to.navigate('/home/profile/');
   }
 
   navigateToExplore() {
-    if (!Modular.to.path.contains('explore'))
-      Modular.to.navigate('/home/explore/');
+    if (!Modular.to.path.contains('explore')) Modular.to.navigate('/home/explore/');
   }
 
   navigateToNotifications() {

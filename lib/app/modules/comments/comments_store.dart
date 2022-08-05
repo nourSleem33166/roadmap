@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart'
     as flutterReactions;
 import 'package:image_picker/image_picker.dart';
@@ -8,12 +9,14 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mobx/mobx.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:roadmap/app/modules/comments/comments_repo.dart';
+import 'package:roadmap/app/modules/comments/replies/replies_page.dart';
 import 'package:roadmap/app/shared/models/comment_model.dart';
 import 'package:roadmap/app/shared/models/interaction.dart';
 import 'package:roadmap/app/shared/models/pagination_model.dart';
 import 'package:roadmap/app/shared/models/user.dart';
 import 'package:roadmap/app/shared/services/storage_service.dart';
 import 'package:roadmap/app/shared/widgets/component_template.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../generated/assets.dart';
 
@@ -120,6 +123,23 @@ abstract class CommentsStoreBase with Store {
     });
     file = null;
     form.control('comment').value = null;
+  }
+
+  void goToReplies(Comment comment, BuildContext context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+        builder: (context) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Container(
+                height: 80.h,
+                child: RepliesPage(refId!, comment, _commentsRepo)),
+          );
+        });
   }
 
   Future makeReaction(Comment comment, String type) async {

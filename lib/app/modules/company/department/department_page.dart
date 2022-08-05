@@ -102,8 +102,7 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
                             ),
                             elevation: 5,
                             child: Container(
-                                width: (MediaQuery.of(context).size.width / 2) -
-                                    30,
+                                width: (MediaQuery.of(context).size.width / 2) - 30,
                                 height: 250,
                                 child: Stack(
                                   children: [
@@ -111,12 +110,11 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
                                       height: double.infinity,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
+                                          borderRadius: BorderRadius.circular(15),
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  store.company?.logo ?? ""))),
+                                              image:
+                                                  NetworkImage(store.company?.logo ?? ""))),
                                     ),
                                     Container(
                                       height: double.infinity,
@@ -129,15 +127,12 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
                                     Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             roadmap.title,
-                                            style: theme.textTheme.bodyText1!
-                                                .copyWith(
-                                                    fontSize: 16,
-                                                    color: AppColors.white),
+                                            style: theme.textTheme.bodyText1!.copyWith(
+                                                fontSize: 16, color: AppColors.white),
                                           ),
                                           SizedBox(
                                             height: 10,
@@ -145,27 +140,21 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
                                           Container(
                                             child: Text(
                                               roadmap.description,
-                                              style: theme.textTheme.bodyText2!
-                                                  .copyWith(
-                                                      color: AppColors.white
-                                                          .withOpacity(0.8)),
+                                              style: theme.textTheme.bodyText2!.copyWith(
+                                                  color: AppColors.white.withOpacity(0.8)),
                                             ),
                                           ),
                                           Spacer(),
                                           Text(
                                             'Created At',
-                                            style: theme.textTheme.bodyText2!
-                                                .copyWith(
-                                                    color: AppColors.white
-                                                        .withOpacity(0.8)),
+                                            style: theme.textTheme.bodyText2!.copyWith(
+                                                color: AppColors.white.withOpacity(0.8)),
                                           ),
                                           Text(
                                             DateFormat('yyyy/MM/dd')
                                                 .format(roadmap.createdAt),
-                                            style: theme.textTheme.bodyText2!
-                                                .copyWith(
-                                                    color: AppColors.white
-                                                        .withOpacity(0.8)),
+                                            style: theme.textTheme.bodyText2!.copyWith(
+                                                color: AppColors.white.withOpacity(0.8)),
                                           ),
                                         ],
                                       ),
@@ -190,8 +179,7 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
       children: [
         Text(
           title,
-          style: theme.textTheme.bodyText2!
-              .copyWith(fontSize: 24, color: theme.primaryColor),
+          style: theme.textTheme.bodyText2!.copyWith(fontSize: 24, color: theme.primaryColor),
         ),
         Text(
           text,
@@ -214,19 +202,16 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(15),
-                  bottomLeft: Radius.circular(15)),
+                  bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15)),
               image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(store.company?.coverImage ?? ""))),
+                  fit: BoxFit.cover, image: NetworkImage(store.company?.coverImage ?? ""))),
         ),
         Container(
           height: 250,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(15),
-                bottomLeft: Radius.circular(15)),
+                bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15)),
             color: Colors.black.withOpacity(0.4),
           ),
         ),
@@ -237,8 +222,7 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
           child: Text(
             store.department?.name ?? "",
             textAlign: TextAlign.center,
-            style: theme.textTheme.headline5!
-                .copyWith(color: AppColors.white, fontSize: 40),
+            style: theme.textTheme.headline5!.copyWith(color: AppColors.white, fontSize: 40),
           ),
         ),
         Positioned(
@@ -259,30 +243,38 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
             elevation: 5,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    topLeft: Radius.circular(30))),
+                    bottomLeft: Radius.circular(30), topLeft: Radius.circular(30))),
             child: Container(
               width: MediaQuery.of(context).size.width / 3,
               height: 60,
               decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.all(1),
-                        child: Text(
-                          'Follow',
-                          style: theme.textTheme.bodyText1!
-                              .copyWith(fontSize: 14, color: AppColors.white),
-                        ),
-                      )),
-                ],
+                      bottomLeft: Radius.circular(30), topLeft: Radius.circular(30))),
+              child: Observer(
+                builder: (context) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            if (store.department!.isFollowed!.value) {
+                              store.unFollowDept();
+                            } else {
+                              store.followDept();
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(1),
+                            child: Text(
+                              store.department!.isFollowed!.value ? 'Following ✔' : 'Follow',
+                              style: theme.textTheme.bodyText1!
+                                  .copyWith(fontSize: 14, color: AppColors.white),
+                            ),
+                          )),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -293,8 +285,7 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
                 width: 60,
                 height: 60,
                 child: IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: AppColors.white, size: 25),
+                    icon: Icon(Icons.arrow_back, color: AppColors.white, size: 25),
                     onPressed: () {
                       Modular.to.pop();
                     }))),

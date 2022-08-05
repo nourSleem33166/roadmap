@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:roadmap/app/shared/models/pagination_model.dart';
 import 'package:roadmap/app/shared/models/roadmap.dart';
@@ -21,6 +23,8 @@ class ExploreRepo {
   Future<PaginationModel<RoadmapModel>> searchRoamaps(
       String? text, int page, int pageSize) async {
     try {
+
+      log("text is $text");
       final result = await _dio.get("learner/search/roadmaps",
           queryParameters: {'page': page, 'pageSize': pageSize, 'text': text});
       return PaginationModel.fromJson(result.data, roadmapsModelFromJson);

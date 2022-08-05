@@ -39,7 +39,8 @@ class CommentsRepo {
     final result = await _dio.post("$_route/$refId/comments",
         data: FormData.fromMap({
           'text': text,
-          'attachment': await MultipartFile.fromFile(file!.path)
+          if (file != null)
+            'attachment': await MultipartFile.fromFile(file.path)
         }),
         queryParameters: {'refId': refId});
     final user = await SharedPreferencesHelper.getUser();
@@ -47,17 +48,18 @@ class CommentsRepo {
     throw AppException.unknown();
   }
 
-  Future<bool> addReply(String text, String refId, String commentId,
+  Future<Comment> addReply(String text, String refId, String commentId,
       {File? file}) async {
-    final result =
-        await _dio.post("$_route/$refId/comments/$commentId/replies", data: {
-      'text': text,
-      // if (file != null) 'attachment': await MultipartFile.fromFile(file.path)
-    });
-    if (result.statusCode == 201)
-      return true;
-    else
-      return false;
+    final result = await _dio.post(
+      "$_route/$refId/comments/$commentId/replies",
+      data: FormData.fromMap({
+        'text': text,
+        if (file != null) 'attachment': await MultipartFile.fromFile(file.path)
+      }),
+    );
+    final user = await SharedPreferencesHelper.getUser();
+    if (result.statusCode == 200) return Comment.fromJson(result.data, user!);
+    throw AppException.unknown();
   }
 
   Future<bool> updateComment(String text, String refId, String commentId,
@@ -84,7 +86,8 @@ class CommentsRepo {
   Future<bool> makeInteraction(
       String refId, String commentId, String type) async {
     final result = await _dio.post(
-        "$_route/$refId/comments/$commentId/interactions",data: {},
+        "$_route/$refId/comments/$commentId/interactions",
+        data: {},
         queryParameters: {
           'commentId': commentId,
           'refId': refId,

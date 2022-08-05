@@ -263,6 +263,19 @@ class _CommentsPageState extends State<CommentsPage> {
                                 comment, reaction.toString());
                           },
                           reactions: store.reactionsList),
+                      InkWell( onTap: (){
+                        store.goToReplies(comment, context);
+                      },
+                        child: Text(
+                            'Reply',
+                            style:Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                              fontWeight: FontWeight.bold,
+                                color: Colors.black45)),
+                      )
+
                     ],
                   )
                 ],

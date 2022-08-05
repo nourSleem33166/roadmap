@@ -1,9 +1,6 @@
-// To parse this JSON data, do
-//
-//     final user = userFromJson(jsonString);
-
 import 'dart:convert';
 
+import 'package:roadmap/app/shared/models/scheduler_model.dart';
 import 'package:roadmap/app/shared/models/work_domain.dart';
 
 User userFromJson(String str) => User.fromJson(json.decode(str));
@@ -24,7 +21,8 @@ class User {
       required this.v,
       required this.refreshToken,
       required this.accessToken,
-      required this.personalImage});
+      required this.personalImage,
+      required this.learnWeek});
 
   String id;
   String firstName;
@@ -39,6 +37,7 @@ class User {
   String refreshToken;
   String accessToken;
   String? personalImage;
+  LearnWeek learnWeek;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
       id: json["_id"],
@@ -53,7 +52,8 @@ class User {
       v: json["__v"],
       refreshToken: json["refreshToken"],
       accessToken: json["accessToken"],
-      personalImage: json['personalImage']);
+      personalImage: json['personalImage'],
+      learnWeek: learnWeekFromJson(json['learnWeek']));
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -68,7 +68,8 @@ class User {
         "__v": v,
         "refreshToken": refreshToken,
         "accessToken": accessToken,
-        "personalImage": personalImage
+        "personalImage": personalImage,
+        "learnWeek": learnWeek.toJson()
       };
 
   @override

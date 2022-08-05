@@ -7,6 +7,7 @@ import 'package:roadmap/app/shared/exceptions/app_exception.dart';
 import 'package:roadmap/app/shared/models/company.dart';
 import 'package:roadmap/app/shared/models/department.dart';
 import 'package:roadmap/app/shared/models/roadmap.dart';
+import 'package:roadmap/app/shared/repos/follow_process_repo.dart';
 import 'package:roadmap/app/shared/toasts/messages_toasts.dart';
 import 'package:roadmap/app/shared/widgets/component_template.dart';
 
@@ -16,6 +17,7 @@ class DeptStore = DeptStoreBase with _$DeptStore;
 
 abstract class DeptStoreBase with Store {
   CompanyRepo _companyRepo;
+  FollowProcessRepo _followProcessRepo;
 
   List<RoadmapModel>? roadmaps = [];
   CompanyModel? company;
@@ -30,15 +32,35 @@ abstract class DeptStoreBase with Store {
   String deptId = "";
   String companyId = "";
 
-  DeptStoreBase(this._companyRepo, String deptId, String companyId) {
+  DeptStoreBase(this._companyRepo, this._followProcessRepo, String deptId, String companyId) {
     this.deptId = deptId;
     this.companyId = companyId;
     getData();
   }
 
-  void goToRoadmapDetails(RoadmapModel roadmap){
+  void goToRoadmapDetails(RoadmapModel roadmap) {
     log("roadmap is ${roadmap.id}");
     Modular.to.pushNamed('/home/roadmapDetails/', arguments: [roadmap.id]);
+  }
+
+  Future followDept() async {
+    runInAction(() {
+      department!.isFollowed!.value = true;
+    });
+    final res = await _followProcessRepo.followDept(company!.id, department!.id);
+    if (!res) {
+      company!.isFollowed!.value = false;
+    }
+  }
+
+  Future unFollowDept() async {
+    runInAction(() {
+      department!.isFollowed!.value = false;
+    });
+    final res = await _followProcessRepo.unFollowDept(company!.id, department!.id);
+    if (!res) {
+      department!.isFollowed!.value = true;
+    }
   }
 
   @action

@@ -4,6 +4,7 @@ import 'package:roadmap/app/modules/company/company_repo.dart';
 import 'package:roadmap/app/shared/exceptions/app_exception.dart';
 import 'package:roadmap/app/shared/models/company.dart';
 import 'package:roadmap/app/shared/models/department.dart';
+import 'package:roadmap/app/shared/repos/follow_process_repo.dart';
 import 'package:roadmap/app/shared/toasts/messages_toasts.dart';
 import 'package:roadmap/app/shared/widgets/component_template.dart';
 
@@ -13,6 +14,7 @@ class CompanyStore = CompanyStoreBase with _$CompanyStore;
 
 abstract class CompanyStoreBase with Store {
   CompanyRepo _companyRepo;
+  FollowProcessRepo _followProcessRepo;
 
   List<Department> departments = [];
   CompanyModel? company;
@@ -25,7 +27,7 @@ abstract class CompanyStoreBase with Store {
   @observable
   int selectedViewIndex = 0;
 
-  CompanyStoreBase(this._companyRepo, String companyId) {
+  CompanyStoreBase(this._companyRepo, this._followProcessRepo, String companyId) {
     this.companyId = companyId;
     getData(companyId);
   }
@@ -36,8 +38,47 @@ abstract class CompanyStoreBase with Store {
   }
 
   void goToDeptDetails(Department dept) {
-    Modular.to.pushNamed('/home/companyDetails/deptDetails',
-        arguments: [dept.id, companyId]);
+    Modular.to.pushNamed('/home/companyDetails/deptDetails', arguments: [dept.id, companyId]);
+  }
+
+  Future followCompany() async {
+    runInAction(() {
+      company!.isFollowed!.value = true;
+    });
+    final res = await _followProcessRepo.followCompany(company!.id);
+    if (!res) {
+      company!.isFollowed!.value = false;
+    }
+  }
+
+  Future unFollowCompany() async {
+    runInAction(() {
+      company!.isFollowed!.value = false;
+    });
+    final res = await _followProcessRepo.unFollowCompany(company!.id);
+    if (!res) {
+      company!.isFollowed!.value = true;
+    }
+  }
+
+  Future addCompanyToFavs() async {
+    runInAction(() {
+      company!.isFavorite!.value = true;
+    });
+    final res = await _followProcessRepo.addCompanyToFavs(company!.id);
+    if (!res) {
+      company!.isFavorite!.value = false;
+    }
+  }
+
+  Future removeCompanyFromFavs() async {
+    runInAction(() {
+      company!.isFavorite!.value = false;
+    });
+    final res = await _followProcessRepo.removeCompanyFromFavs(company!.id);
+    if (!res) {
+      company!.isFavorite!.value = true;
+    }
   }
 
   @action

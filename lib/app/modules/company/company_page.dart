@@ -88,8 +88,7 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
             height: 10,
           ),
           Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             elevation: 5,
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -104,16 +103,13 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                   SizedBox(
                     height: 20,
                   ),
-                  _buildInfoItem(context, 'Our Email',
-                      store.company?.email ?? "Meta@facebook.com"),
+                  _buildInfoItem(
+                      context, 'Our Email', store.company?.email ?? "Meta@facebook.com"),
                   SizedBox(
                     height: 20,
                   ),
-                  _buildInfoItem(
-                      context,
-                      'Our Staff',
-                      store.company?.numOfEmployees?.toString() ??
-                          10.toString()),
+                  _buildInfoItem(context, 'Our Staff',
+                      store.company?.numOfEmployees?.toString() ?? 10.toString()),
                   SizedBox(
                     height: 20,
                   ),
@@ -157,8 +153,8 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                   .map((dept) => Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
-                          onTap: (){
-                          store.goToDeptDetails(dept);
+                          onTap: () {
+                            store.goToDeptDetails(dept);
                           },
                           child: Card(
                             shape: RoundedRectangleBorder(
@@ -166,8 +162,7 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                             ),
                             elevation: 5,
                             child: Container(
-                                width:
-                                    (MediaQuery.of(context).size.width / 2) - 30,
+                                width: (MediaQuery.of(context).size.width / 2) - 30,
                                 height: 250,
                                 child: Stack(
                                   children: [
@@ -178,8 +173,8 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                                           borderRadius: BorderRadius.circular(15),
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  store.company?.logo ?? ""))),
+                                              image:
+                                                  NetworkImage(store.company?.logo ?? ""))),
                                     ),
                                     Container(
                                       height: double.infinity,
@@ -192,15 +187,12 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                                     Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             dept.name,
-                                            style: theme.textTheme.bodyText1!
-                                                .copyWith(
-                                                    fontSize: 16,
-                                                    color: AppColors.white),
+                                            style: theme.textTheme.bodyText1!.copyWith(
+                                                fontSize: 16, color: AppColors.white),
                                           ),
                                           SizedBox(
                                             height: 10,
@@ -208,9 +200,8 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                                           Flexible(
                                             child: Text(
                                               dept.description,
-                                              style: theme.textTheme.bodyText2!
-                                                  .copyWith(
-                                                      color: AppColors.white.withOpacity(0.8)),
+                                              style: theme.textTheme.bodyText2!.copyWith(
+                                                  color: AppColors.white.withOpacity(0.8)),
                                             ),
                                           ),
                                         ],
@@ -236,8 +227,7 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
       children: [
         Text(
           title,
-          style: theme.textTheme.bodyText2!
-              .copyWith(fontSize: 24, color: theme.primaryColor),
+          style: theme.textTheme.bodyText2!.copyWith(fontSize: 24, color: theme.primaryColor),
         ),
         Text(
           text,
@@ -260,19 +250,16 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(15),
-                  bottomLeft: Radius.circular(15)),
+                  bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15)),
               image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(store.company?.coverImage ?? ""))),
+                  fit: BoxFit.cover, image: NetworkImage(store.company?.coverImage ?? ""))),
         ),
         Container(
           height: 300,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(15),
-                bottomLeft: Radius.circular(15)),
+                bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15)),
             color: Colors.black.withOpacity(0.4),
           ),
         ),
@@ -317,42 +304,62 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
             elevation: 5,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    topLeft: Radius.circular(30))),
+                    bottomLeft: Radius.circular(30), topLeft: Radius.circular(30))),
             child: Container(
               width: MediaQuery.of(context).size.width / 2,
               height: 60,
               decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    child: Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: AppColors.white),
-                        child: Center(
+                      bottomLeft: Radius.circular(30), topLeft: Radius.circular(30))),
+              child: Observer(
+                builder: (context) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      InkWell(
+                        child: Container(
+                            decoration:
+                                BoxDecoration(shape: BoxShape.circle, color: AppColors.white),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(7),
+                                child: IconButton(
+                                    icon: Icon(
+                                        store.company!.isFavorite!.value
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: theme.primaryColor,
+                                        size: 35),
+                                    onPressed: () {
+                                      if (store.company!.isFavorite!.value) {
+                                        store.removeCompanyFromFavs();
+                                      } else {
+                                        store.addCompanyToFavs();
+                                      }
+                                    }),
+                              ),
+                            )),
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (store.company!.isFollowed!.value) {
+                              store.unFollowCompany();
+                            } else {
+                              store.followCompany();
+                            }
+                          },
                           child: Padding(
-                            padding: const EdgeInsets.all(7),
-                            child: Icon(Icons.favorite,
-                                color: theme.primaryColor, size: 35),
-                          ),
-                        )),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.all(1),
-                        child: Text(
-                          'Follow',
-                          style: theme.textTheme.bodyText1!
-                              .copyWith(fontSize: 14, color: AppColors.white),
-                        ),
-                      )),
-                ],
+                            padding: const EdgeInsets.all(1),
+                            child: Text(
+                              store.company!.isFollowed!.value ? 'Following ✔' : 'Follow',
+                              style: theme.textTheme.bodyText1!
+                                  .copyWith(fontSize: 14, color: AppColors.white),
+                            ),
+                          )),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -363,8 +370,7 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                 width: 60,
                 height: 60,
                 child: IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: AppColors.white, size: 25),
+                    icon: Icon(Icons.arrow_back, color: AppColors.white, size: 25),
                     onPressed: () {
                       Modular.to.pop();
                     }))),
@@ -384,8 +390,8 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                         children: [
                           Text('About',
                               textAlign: TextAlign.center,
-                              style: theme.textTheme.bodyText1!.copyWith(
-                                  color: AppColors.white, fontSize: 16)),
+                              style: theme.textTheme.bodyText1!
+                                  .copyWith(color: AppColors.white, fontSize: 16)),
                           Divider(
                             thickness: 2,
                             color: store.selectedViewIndex == 0
@@ -406,8 +412,8 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                         children: [
                           Text('Departments',
                               textAlign: TextAlign.center,
-                              style: theme.textTheme.bodyText1!.copyWith(
-                                  color: AppColors.white, fontSize: 16)),
+                              style: theme.textTheme.bodyText1!
+                                  .copyWith(color: AppColors.white, fontSize: 16)),
                           Divider(
                             thickness: 2,
                             color: store.selectedViewIndex == 1

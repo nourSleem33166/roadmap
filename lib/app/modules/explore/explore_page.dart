@@ -230,10 +230,10 @@ class _ExplorePageState extends ModularState<ExplorePage, ExploreStore> {
                   children: [
                     Row(
                       children: [
-                        _buildInfoItem(context, roadmap.company!.name,
+                        _buildInfoItem(context, roadmap.company?.name??"",
                             FontAwesomeIcons.suitcase),
                         Spacer(),
-                        _buildInfoItem(context, roadmap.department!.name,
+                        _buildInfoItem(context, roadmap.department?.name??"",
                             FontAwesomeIcons.suitcase),
                       ],
                     ),

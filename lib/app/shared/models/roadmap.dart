@@ -8,8 +8,8 @@ import 'package:roadmap/app/shared/models/company.dart';
 
 import 'department.dart';
 
-List<RoadmapModel> roadmapsModelFromJson(String str) => List<RoadmapModel>.from(
-    json.decode(str).map((x) => RoadmapModel.fromJson(x)));
+List<RoadmapModel> roadmapsModelFromJson(String str) =>
+    List<RoadmapModel>.from(json.decode(str).map((x) => RoadmapModel.fromJson(x)));
 
 class RoadmapModel {
   RoadmapModel(
@@ -23,7 +23,8 @@ class RoadmapModel {
       required this.v,
       required this.company,
       required this.department,
-      required this.published});
+      required this.published,
+      required this.learnStatus});
 
   String id;
   String departmentId;
@@ -36,6 +37,7 @@ class RoadmapModel {
   CompanyModel? company;
   Department? department;
   bool published;
+  LearnStatus? learnStatus;
 
   factory RoadmapModel.fromJson(Map<String, dynamic> json) => RoadmapModel(
       id: json["_id"],
@@ -45,66 +47,15 @@ class RoadmapModel {
       description: json["description"],
       createdAt: DateTime.parse(json["createdAt"]),
       updatedAt: DateTime.parse(json["updatedAt"]),
+      learnStatus: json['learnStatus'] == "none"
+          ? LearnStatus.None
+          : json['learnStatus'] == 'learned'
+              ? LearnStatus.Learned
+              : LearnStatus.Learning,
       v: json["__v"],
-      company:json["company"]==null?null: CompanyModel.fromJson(json["company"]),
-      department: json["department"]==null?null:Department.fromJson(json["department"]),
+      company: json["company"] == null ? null : CompanyModel.fromJson(json["company"]),
+      department: json["department"] == null ? null : Department.fromJson(json["department"]),
       published: json["published"]);
 }
 
-//// To parse this JSON data, do
-// //
-// //     final roadmapModel = roadmapModelFromJson(jsonString);
-//
-// import 'dart:convert';
-//
-// List<RoadmapModel> roadmapModelFromJson(String str) => List<RoadmapModel>.from(json.decode(str).map((x) => RoadmapModel.fromJson(x)));
-//
-// String roadmapModelToJson(List<RoadmapModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-//
-// class RoadmapModel {
-//     RoadmapModel({
-//         this.id,
-//         this.departmentId,
-//         this.companyId,
-//         this.title,
-//         this.description,
-//         this.published,
-//         this.createdAt,
-//         this.updatedAt,
-//         this.v,
-//     });
-//
-//     String id;
-//     String departmentId;
-//     String companyId;
-//     String title;
-//     String description;
-//     bool published;
-//     DateTime createdAt;
-//     DateTime updatedAt;
-//     int v;
-//
-//     factory RoadmapModel.fromJson(Map<String, dynamic> json) => RoadmapModel(
-//         id: json["_id"],
-//         departmentId: json["departmentId"],
-//         companyId: json["companyId"],
-//         title: json["title"],
-//         description: json["description"],
-//         published: json["published"],
-//         createdAt: DateTime.parse(json["createdAt"]),
-//         updatedAt: DateTime.parse(json["updatedAt"]),
-//         v: json["__v"],
-//     );
-//
-//     Map<String, dynamic> toJson() => {
-//         "_id": id,
-//         "departmentId": departmentId,
-//         "companyId": companyId,
-//         "title": title,
-//         "description": description,
-//         "published": published,
-//         "createdAt": createdAt.toIso8601String(),
-//         "updatedAt": updatedAt.toIso8601String(),
-//         "__v": v,
-//     };
-// }
+enum LearnStatus { None, Learning, Learned }

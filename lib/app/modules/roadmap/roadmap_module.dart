@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:roadmap/app/modules/comments/replies/replies_store.dart';
 import 'package:roadmap/app/modules/company/company_repo.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_graph/roadmap_graph_page.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_graph/roadmap_graph_store.dart';
@@ -17,6 +18,8 @@ class RoadmapModule extends Module {
         i.get<RoadmapRepo>(), i.get<CompanyRepo>(), i.args.data[0])),
     Bind((i) => RoadmapGraphStore(i.get<RoadmapRepo>(), i.args.data[0])),
     Bind((i) => CommentsStore(), isSingleton: false, isLazy: true),
+    Bind((i) => RepliesStore(), isSingleton: false, isLazy: true),
+
   ];
 
   @override

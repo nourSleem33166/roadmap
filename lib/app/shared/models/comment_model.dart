@@ -30,7 +30,7 @@ class Comment {
   late String? createdAt;
   late String? updatedAt;
   late String learnerId;
-  late String roadmapId;
+  late String? roadmapId;
   String? parentId;
   late final Learner learner;
   late Observable<Interaction?> interactionValue;

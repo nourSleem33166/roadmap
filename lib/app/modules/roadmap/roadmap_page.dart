@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_store.dart';
+import 'package:roadmap/app/shared/models/roadmap.dart';
 import 'package:roadmap/app/shared/widgets/component_template.dart';
 
 import '../../shared/theme/app_colors.dart';
@@ -30,8 +31,7 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 upperSection(context),
-                Expanded(
-                    child: SingleChildScrollView(child: _buildAbout(context)))
+                Expanded(child: SingleChildScrollView(child: _buildAbout(context)))
               ],
             ),
           );
@@ -78,8 +78,7 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
       children: [
         Text(
           title,
-          style: theme.textTheme.bodyText2!
-              .copyWith(fontSize: 24, color: theme.primaryColor),
+          style: theme.textTheme.bodyText2!.copyWith(fontSize: 24, color: theme.primaryColor),
         ),
         Text(
           text,
@@ -102,8 +101,7 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
           padding: const EdgeInsets.all(1),
           child: Text(
             'View Roadmap Graph',
-            style: theme.textTheme.bodyText1!
-                .copyWith(fontSize: 14, color: AppColors.white),
+            style: theme.textTheme.bodyText1!.copyWith(fontSize: 14, color: AppColors.white),
           ),
         ));
   }
@@ -118,19 +116,16 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(15),
-                  bottomLeft: Radius.circular(15)),
+                  bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15)),
               image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(store.company?.coverImage ?? ""))),
+                  fit: BoxFit.cover, image: NetworkImage(store.company?.coverImage ?? ""))),
         ),
         Container(
           height: 300,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(15),
-                bottomLeft: Radius.circular(15)),
+                bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15)),
             color: Colors.black.withOpacity(0.4),
           ),
         ),
@@ -175,16 +170,14 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
             elevation: 5,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    topLeft: Radius.circular(30))),
+                    bottomLeft: Radius.circular(30), topLeft: Radius.circular(30))),
             child: Container(
               width: MediaQuery.of(context).size.width / 2.5,
               height: 60,
               decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      topLeft: Radius.circular(30))),
+                      bottomLeft: Radius.circular(30), topLeft: Radius.circular(30))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -193,7 +186,11 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
                       child: Padding(
                         padding: const EdgeInsets.all(1),
                         child: Text(
-                          'Schedule To Me',
+                          store.roadmap?.learnStatus == LearnStatus.None
+                              ? 'Schedule To Me'
+                              : store.roadmap?.learnStatus == LearnStatus.Learned
+                                  ? 'Learned ✔'
+                                  : 'Learning Now ⌛',
                           style: theme.textTheme.bodyText1!
                               .copyWith(fontSize: 14, color: AppColors.white),
                         ),
@@ -209,8 +206,7 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
                 width: 60,
                 height: 60,
                 child: IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: AppColors.white, size: 25),
+                    icon: Icon(Icons.arrow_back, color: AppColors.white, size: 25),
                     onPressed: () {
                       Modular.to.pop();
                     }))),

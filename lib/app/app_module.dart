@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:roadmap/app/modules/auth/auth_module.dart';
 import 'package:roadmap/app/modules/auth/auth_repo.dart';
+import 'package:roadmap/app/modules/scheduler/scheduler_page.dart';
 import 'package:roadmap/app/modules/splash/splash_page.dart';
 
 import '../app/shared/dio/factory.dart';
@@ -16,7 +17,7 @@ class AppModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => SplashPage()),
+    ChildRoute(Modular.initialRoute, child: (_, args) => SchedulerPage()),
     ModuleRoute('/home/', module: HomeModule()),
     ModuleRoute('/auth/', module: AuthModule())
   ];
