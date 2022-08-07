@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:calendar_view/calendar_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -36,21 +37,24 @@ class AppWidget extends StatelessWidget {
                 controller.forgetSavedTheme();
               }
             },
-            child: ThemeConsumer(
-                child: Builder(
-                    builder: (themeContext) => MaterialApp.router(
-                        routerDelegate: Modular.routerDelegate,
-                        routeInformationParser: Modular.routeInformationParser,
-                        title: "Roadmap",
-                        debugShowCheckedModeBanner: false,
-                        builder: (context, child) {
-                          child = botToastBuilder(context, child);
-                          return child;
-                        },
-                        localizationsDelegates: context.localizationDelegates,
-                        supportedLocales: context.supportedLocales,
-                        locale: context.locale,
-                        color: AppColors.primary,
-                        theme: ThemeProvider.themeOf(themeContext).data)))));
+            child: CalendarControllerProvider(
+              controller: EventController(),
+              child: ThemeConsumer(
+                  child: Builder(
+                      builder: (themeContext) => MaterialApp.router(
+                          routerDelegate: Modular.routerDelegate,
+                          routeInformationParser: Modular.routeInformationParser,
+                          title: "Roadmap",
+                          debugShowCheckedModeBanner: false,
+                          builder: (context, child) {
+                            child = botToastBuilder(context, child);
+                            return child;
+                          },
+                          localizationsDelegates: context.localizationDelegates,
+                          supportedLocales: context.supportedLocales,
+                          locale: context.locale,
+                          color: AppColors.primary,
+                          theme: ThemeProvider.themeOf(themeContext).data))),
+            )));
   }
 }

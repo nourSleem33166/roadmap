@@ -53,7 +53,10 @@ class User {
       refreshToken: json["refreshToken"],
       accessToken: json["accessToken"],
       personalImage: json['personalImage'],
-      learnWeek: learnWeekFromJson(json['learnWeek']));
+      learnWeek: LearnWeek.fromJson(json['learnWeek']
+
+
+      ));
 
   Map<String, dynamic> toJson() => {
         "_id": id,

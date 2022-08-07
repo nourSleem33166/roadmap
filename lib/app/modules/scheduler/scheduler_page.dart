@@ -1,14 +1,25 @@
+import 'dart:developer';
+
+import 'package:calendar_view/calendar_view.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_week_view/flutter_week_view.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:roadmap/app/modules/scheduler/scheduler_store.dart';
 import 'package:roadmap/app/shared/models/scheduler_model.dart';
+import 'package:roadmap/app/shared/theme/app_colors.dart';
+import 'package:roadmap/app/shared/widgets/component_template.dart';
 
 class SchedulerPage extends StatefulWidget {
   final LearnWeek learnWeek = LearnWeek(
       sat: WeekDay(isHoliday: false, dates: [
         SchedulerDate(startAt: '12:30', endAt: '14:30', referenceId: 'someId'),
-        SchedulerDate(startAt: '15:30', endAt: '16:30', referenceId: 'someId'),
+        SchedulerDate(startAt: '15:30', endAt: '16:30', referenceId: 'someId')
       ]),
-      sun: WeekDay(isHoliday: true, dates: []),
+      sun: WeekDay(isHoliday: true, dates: [
+        SchedulerDate(startAt: '12:30', endAt: '14:30', referenceId: 'someId'),
+        SchedulerDate(startAt: '15:30', endAt: '16:30', referenceId: 'someId')
+      ]),
       mon: WeekDay(isHoliday: true, dates: []),
       tue: WeekDay(isHoliday: true, dates: []),
       wed: WeekDay(isHoliday: true, dates: []),
@@ -20,52 +31,105 @@ class SchedulerPage extends StatefulWidget {
 }
 
 class _SchedulerPageState extends State<SchedulerPage> {
+  final store = Modular.get<SchedulerStore>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    store.initValues(context, CalendarControllerProvider.of(context).controller);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final date=DateTime.now();
     return Scaffold(
-      body: WeekView(
-        dates: [date.subtract(Duration(days: 1)), date, date.add(Duration(days: 1))],
-        events: [
-          FlutterWeekViewEvent(
-            title: 'An event 2',
-            description: 'A description 2',
-            start: date.add(Duration(hours: 19)),
-            end: date.add(Duration(hours: 22)),
-          ),
-          FlutterWeekViewEvent(
-            title: 'An event 3',
-            description: 'A description 3',
-            start: date.add(Duration(hours: 23, minutes: 30)),
-            end: date.add(Duration(hours: 25, minutes: 30)),
-          ),
-          FlutterWeekViewEvent(
-            title: 'An event 4',
-            description: 'A description 4',
-            start: date.add(Duration(hours: 20)),
-            end: date.add(Duration(hours: 21)),
-          ),
-          FlutterWeekViewEvent(
-            title: 'An event 5',
-            description: 'A description 5',
-            start: date.add(Duration(hours: 20)),
-            end: date.add(Duration(hours: 21)),
-          ),
-        ],
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          child: Text('Submit'),
+          onPressed: () {
+            store.updateScheduler(context);
+          },
+        ),
+        body: Observer(builder: (context) {
+          return ComponentTemplate(
+            state: store.componentState,
+            screen: SingleChildScrollView(
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.horizontal,
+              child: WeekView(
+
+                  scrollOffset: 0,
+                  weekDays: [
+                    if (!store.learnWeek!.sat.isHoliday) WeekDays.saturday,
+                    if (!store.learnWeek!.sun.isHoliday) WeekDays.sunday,
+                    if (!store.learnWeek!.mon.isHoliday) WeekDays.monday,
+                    if (!store.learnWeek!.tue.isHoliday) WeekDays.tuesday,
+                    if (!store.learnWeek!.wed.isHoliday) WeekDays.wednesday,
+                    if (!store.learnWeek!.thu.isHoliday) WeekDays.thursday,
+                    if (!store.learnWeek!.fri.isHoliday) WeekDays.friday,
+                  ],
+                  width: store.calcWeekdays() / 3 < 1
+                      ? null
+                      : MediaQuery.of(context).size.width * (store.calcWeekdays() / 3),
+                  showWeekends: true,
+                  weekDayBuilder: (date) {
+                    return Center(
+                        child: Text(
+                      DateFormat('EEE').format(date),
+                      style: date.weekday == DateTime.now().weekday
+                          ? Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: AppColors.primary)
+                          : Theme.of(context).textTheme.bodyMedium,
+                    ));
+                  },
+                  eventTileBuilder: (weekDate, eventList, rect, startTime, endTime) {
+                    return Column(
+                      children: eventList
+                          .map((e) => Container(
+                                width: rect.width,
+                                height: rect.height,
+                                child: Card(
+                                    color: AppColors.primary,
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          e.title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(color: AppColors.white),
+                                        ),
+                                      ),
+                                    )),
+                              ))
+                          .toList(),
+                    );
+                  },
+                  heightPerMinute: 1,
+                  weekPageHeaderBuilder: (_, __) {
+                    return Container();
+                  },
+                  onEventTap: (event, date) {
+                    event.forEach((element) {
+                      CalendarControllerProvider.of(context).controller.remove(element);
+                    });
+                  },
+                  maxDay: DateTime.now(),
+                  minDay: DateTime.now(),
+                  initialDay: DateTime.now(),
+                  onDateLongPress: (date) {
+                    log("date is $date");
+
+                    store.handleDateLongPress(date);
+                  }),
+            ),
+          );
+        }));
   }
 }
-
-extension DateTimeExtension on DateTime {
-  DateTime next(int day) {
-    return this.add(
-      Duration(
-        days: (day - this.weekday) % DateTime.daysPerWeek,
-      ),
-    );
-  }
-}
-
-
-

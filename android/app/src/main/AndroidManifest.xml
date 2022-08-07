@@ -2,11 +2,13 @@
     package="noursleem.roadmap">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:label="roadmap">
+
 
         <activity
             android:name=".MainActivity"
@@ -35,7 +37,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"><intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED"></action></intent-filter></receiver>
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
     </application>
 
 </manifest>

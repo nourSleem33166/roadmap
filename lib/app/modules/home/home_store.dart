@@ -20,7 +20,9 @@ abstract class HomeStoreBase with Store {
   }
 
   navigateToProfile() {
-    if (!Modular.to.path.contains('profile')) Modular.to.navigate('/home/profile/');
+    if (!Modular.to.path.contains('profile')) Modular.to.pushNamed('/home/scheduler/',arguments: [
+      ''
+    ]);
   }
 
   navigateToExplore() {
@@ -30,6 +32,10 @@ abstract class HomeStoreBase with Store {
   navigateToNotifications() {
     if (!Modular.to.path.contains('notifications'))
       Modular.to.navigate('/home/notifications/');
+
+
+
+
   }
 
   @action

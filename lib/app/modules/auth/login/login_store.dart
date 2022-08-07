@@ -35,6 +35,7 @@ abstract class LoginStoreBase with Store {
     try {
       showLoading();
       final res = await _authRepo.login(form.value);
+
       if (res) Modular.to.pushNamedAndRemoveUntil('/home/', (p0) => false);
     } on AppException catch (e) {
       showToast(e.message);

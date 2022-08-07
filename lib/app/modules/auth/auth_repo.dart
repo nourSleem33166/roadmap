@@ -38,14 +38,11 @@ class AuthRepo {
   }
 
   Future<bool> login(Map<String, dynamic> data) async {
-    try {
+
       final result = await _dio.post("auth/learner/local/signin", data: data);
       final user = userFromJson(json.encode(result.data));
       await SharedPreferencesHelper.setUser(user);
       return true;
-    } catch (e) {
-      print("e is $e");
-      throw AppExceptionHandler.instance.handleError(e);
-    }
+
   }
 }

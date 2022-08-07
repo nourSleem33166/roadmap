@@ -182,7 +182,11 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (store.roadmap?.learnStatus == LearnStatus.None) {
+                          store.navigateToScheduler();
+                        }
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(1),
                         child: Text(

@@ -17,7 +17,7 @@ class AppModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => SchedulerPage()),
+    ChildRoute(Modular.initialRoute, child: (_, args) => SplashPage()),
     ModuleRoute('/home/', module: HomeModule()),
     ModuleRoute('/auth/', module: AuthModule())
   ];

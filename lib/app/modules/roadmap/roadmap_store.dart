@@ -56,4 +56,7 @@ abstract class RoadmapStoreBase with Store {
   void goToRoadmapGraph() {
     Modular.to.pushNamed('/home/roadmapDetails/roadmapGraph/', arguments: [roadmapId]);
   }
+  void navigateToScheduler() {
+    Modular.to.pushNamed('/home/scheduler/', arguments: [roadmapId]);
+  }
 }

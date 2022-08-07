@@ -4,6 +4,9 @@
 
 import 'dart:convert';
 
+import 'package:calendar_view/calendar_view.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 LearnWeek learnWeekFromJson(String str) => LearnWeek.fromJson(json.decode(str));
 
 String learnWeekToJson(LearnWeek data) => json.encode(data.toJson());
@@ -75,9 +78,21 @@ class SchedulerDate {
 
   SchedulerDate({required this.startAt, required this.endAt, required this.referenceId});
 
+  factory SchedulerDate.fromScheduler(CalendarEventData data) {
+    return SchedulerDate(
+        startAt: DateFormat('HH:mm').format(data.startTime!),
+        endAt: DateFormat('HH:mm').format(data.endTime!),
+        referenceId: data.event?.toString() ?? "");
+  }
+
   factory SchedulerDate.fromJson(Map<String, dynamic> json) => SchedulerDate(
       endAt: json['endAt'], startAt: json['startAt'], referenceId: json['referenceId']);
 
   Map<String, dynamic> toJson() =>
       {'endAt': endAt, 'startAt': startAt, 'referenceId': referenceId};
+
+  @override
+  String toString() {
+    return 'SchedulerDate{startAt: $startAt, endAt: $endAt, referenceId: $referenceId}';
+  }
 }
