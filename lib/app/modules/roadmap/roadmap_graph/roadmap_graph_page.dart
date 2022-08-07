@@ -32,7 +32,7 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
             Positioned.fill(
               child: Image.asset(
                 Assets.assetsBackground,
-                color: AppColors.primary.withOpacity(0.2),
+                color: AppColors.primary.withOpacity(0.1),
                 fit: BoxFit.fill,
               ),
             ),

@@ -37,9 +37,9 @@ abstract class RoadmapGraphStoreBase with Store {
   RoadmapGraphStoreBase(this._roadmapRepo, String roadmapId) {
     this.roadmapId = roadmapId;
     builder
-      ..levelSeparation = (40)
+      ..levelSeparation = (70)
       ..orientation = (SugiyamaConfiguration.ORIENTATION_TOP_BOTTOM)
-      ..nodeSeparation = 10;
+      ..nodeSeparation = 50 ;
     getData();
   }
 
