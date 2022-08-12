@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -91,13 +93,28 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
 
   Widget sectionNode(BuildContext context, RoadmapNode node) {
     return InkWell(
-      onTap: () {
-        store.showNodeDialog(context, node);
-      },
+      onLongPress: store.isLearningMode
+          ? () {
+              store.makeExam(context, node);
+            }
+          : null,
+      onTap: store.isLearningMode
+          ? store.isSectionOpen(node)
+              ? () {
+                  store.showNodeDialog(context, node);
+                }
+              : null
+          : () {
+              store.showNodeDialog(context, node);
+            },
       child: Card(
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Color(0xff1f4690),
+        color: store.isLearningMode
+            ? store.isSectionOpen(node)
+                ? Color(0xff1f4690)
+                : Colors.grey
+            : Color(0xff1f4690),
         child: Stack(
           children: [
             Positioned(
@@ -140,83 +157,84 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
 
   Widget leafNode(BuildContext context, RoadmapNode node) {
     return InkWell(
-      onTap: () {
-        store.showNodeDialog(context, node);
-      },
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Color(0xff36ae7c),
-        child: Stack(
-          children: [
-            Positioned(
-              right: 1,
-              left: 1,
-              bottom: 5,
-              child: Opacity(
-                  opacity: 0.3,
-                  child: Image.asset(
-                    Assets.assetsLeaf,
-                    width: 45,
-                    height: 45,
-                  )),
-            ),
-            Container(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
-              child: Center(
-                  child: Text(
-                node.label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              )),
-            )),
-          ],
-        ),
-      ),
-    );
+        onLongPress: store.isLearningMode
+            ? () {
+                store.makeExam(context, node);
+              }
+            : null,
+        onTap: () {
+          store.showNodeDialog(context, node);
+        },
+        child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            color: Color(0xff36ae7c),
+            child: Stack(children: [
+              Positioned(
+                right: 1,
+                left: 1,
+                bottom: 5,
+                child: Opacity(
+                    opacity: 0.3,
+                    child: Image.asset(
+                      Assets.assetsLeaf,
+                      width: 45,
+                      height: 45,
+                    )),
+              ),
+              Container(
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
+                      child: Center(
+                          child: Text(node.label,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              )))))
+            ])));
   }
 
   Widget roadmapNode(BuildContext context, RoadmapNode node) {
-    return InkWell(
-      onTap: () {
-        store.showNodeDialog(context, node);
-      },
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Color(0xffeb5353),
-        child: Stack(
-          children: [
-            Positioned(
-              right: 1,
-              left: 1,
-              top: 5,
-              child: Opacity(
-                  opacity: 0.3,
-                  child: Image.asset(
-                    Assets.assetsTrack,
-                    width: 55,
-                    height: 55,
-                  )),
-            ),
-            Container(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
-              child: Center(
-                  child: Text(
-                node.label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+    return Opacity(
+      opacity: node.isPassed != null && node.isPassed! ? 0.5 : 1,
+      child: InkWell(
+        onTap: () {
+          store.showNodeDialog(context, node);
+        },
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          color: Color(0xffeb5353),
+          child: Stack(
+            children: [
+              Positioned(
+                right: 1,
+                left: 1,
+                top: 5,
+                child: Opacity(
+                    opacity: 0.3,
+                    child: Image.asset(
+                      Assets.assetsTrack,
+                      width: 55,
+                      height: 55,
+                    )),
+              ),
+              Container(
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
+                child: Center(
+                    child: Text(
+                  node.label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )),
               )),
-            )),
-          ],
+            ],
+          ),
         ),
       ),
     );

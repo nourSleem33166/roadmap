@@ -21,6 +21,13 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends ModularState<ExplorePage, ExploreStore> {
+
+ @override
+  void initState() {
+    super.initState();
+    store.checkIfLearnerHasExam(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

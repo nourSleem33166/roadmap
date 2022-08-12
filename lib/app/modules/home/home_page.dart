@@ -51,14 +51,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               )),
               selectedColor: theme.primaryColor,
             ),
-
-            SalomonBottomBarItem(
-              icon: Icon(FontAwesomeIcons.solidBell),
-              title: Text("Notification",style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: Colors.redAccent
-              )),
-              selectedColor: Colors.redAccent,
-            ),
           ],
           itemPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         );

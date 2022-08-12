@@ -22,7 +22,8 @@ class User {
       required this.refreshToken,
       required this.accessToken,
       required this.personalImage,
-      required this.learnWeek});
+      required this.learnWeek,
+      this.coverImage});
 
   String id;
   String firstName;
@@ -37,6 +38,7 @@ class User {
   String refreshToken;
   String accessToken;
   String? personalImage;
+  String? coverImage;
   LearnWeek learnWeek;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -53,10 +55,8 @@ class User {
       refreshToken: json["refreshToken"],
       accessToken: json["accessToken"],
       personalImage: json['personalImage'],
-      learnWeek: LearnWeek.fromJson(json['learnWeek']
-
-
-      ));
+      coverImage: json['coverImage'],
+      learnWeek: LearnWeek.fromJson(json['learnWeek']));
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -72,6 +72,7 @@ class User {
         "refreshToken": refreshToken,
         "accessToken": accessToken,
         "personalImage": personalImage,
+        "coverImage": coverImage,
         "learnWeek": learnWeek.toJson()
       };
 

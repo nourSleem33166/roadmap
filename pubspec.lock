@@ -105,7 +105,7 @@ packages:
       name: calendar_view
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.5"
+    version: "1.0.0"
   characters:
     dependency: transitive
     description:

@@ -7,9 +7,35 @@ import 'dart:convert';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-LearnWeek learnWeekFromJson(String str) => LearnWeek.fromJson(json.decode(str));
 
-String learnWeekToJson(LearnWeek data) => json.encode(data.toJson());
+
+SchedulerModel schedulerModelFromJson(String str) =>
+    SchedulerModel.fromJson(json.decode(str));
+
+String schedulerModelToJson(SchedulerModel data) => json.encode(data.toJson());
+
+class SchedulerModel {
+  SchedulerModel({
+    required this.learnWeek,
+    required this.roadmaps,
+  });
+
+  LearnWeek learnWeek;
+  List<Roadmap>? roadmaps;
+
+  factory SchedulerModel.fromJson(Map<String, dynamic> json) => SchedulerModel(
+        learnWeek: LearnWeek.fromJson(json["learnWeek"]),
+        roadmaps: json["roadmaps"] == null
+            ? []
+            : List<Roadmap>.from(json["roadmaps"].map((x) => Roadmap.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "learnWeek": learnWeek.toJson(),
+        "roadmaps":
+            roadmaps == null ? null : List<dynamic>.from(roadmaps!.map((x) => x.toJson())),
+      };
+}
 
 class LearnWeek {
   LearnWeek({
@@ -49,6 +75,11 @@ class LearnWeek {
         "Thu": thu.toJson(),
         "Fri": fri.toJson(),
       };
+
+  @override
+  String toString() {
+    return 'LearnWeek{sat: $sat, sun: $sun, mon: $mon, tue: $tue, wed: $wed, thu: $thu, fri: $fri}';
+  }
 }
 
 class WeekDay {
@@ -69,6 +100,11 @@ class WeekDay {
         "isHoliday": isHoliday,
         "dates": List<SchedulerDate>.from(dates.map((x) => x)),
       };
+
+  @override
+  String toString() {
+    return 'WeekDay{isHoliday: $isHoliday, dates: $dates}';
+  }
 }
 
 class SchedulerDate {
@@ -95,4 +131,24 @@ class SchedulerDate {
   String toString() {
     return 'SchedulerDate{startAt: $startAt, endAt: $endAt, referenceId: $referenceId}';
   }
+}
+
+class Roadmap {
+  Roadmap({
+    required this.id,
+    required this.name,
+  });
+
+  String id;
+  String name;
+
+  factory Roadmap.fromJson(Map<String, dynamic> json) => Roadmap(
+        id: json["_id"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+      };
 }

@@ -22,7 +22,25 @@ class RoadmapNode {
     required this.supplements,
     required this.v,
     this.deletedAt,
+    this.isPassed
   });
+
+
+  //  {
+  //     "_id": "62eff883ae75aad5dc4b43f4",
+  //     "roadmapId": "626857693d70ad9a9638695d",
+  //     "label": "TypeScript",
+  //     "referenceId": null,
+  //     "requiredHoursToStudy": 10,
+  //     "type": "section",
+  //     "accessType": "required",
+  //     "quantityOfRequiredQ": 3,
+  //     "quantityOfOptionalQ": 1,
+  //     "parents": [],
+  //     "supplements": [],
+  //     "__v": 0,
+  //     "isPassed": false
+  //   },
 
   String id;
   String roadmapId;
@@ -37,6 +55,7 @@ class RoadmapNode {
   List<String> supplements;
   int v;
   DateTime? deletedAt;
+  bool? isPassed;
 
   factory RoadmapNode.fromJson(Map<String, dynamic> json) => RoadmapNode(
         id: json["_id"],
@@ -54,5 +73,6 @@ class RoadmapNode {
         deletedAt: json["deletedAt"] == null
             ? null
             : DateTime.parse(json["deletedAt"]),
+    isPassed: json['isPassed']
       );
 }

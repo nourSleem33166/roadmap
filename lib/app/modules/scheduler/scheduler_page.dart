@@ -33,6 +33,7 @@ class SchedulerPage extends StatefulWidget {
 class _SchedulerPageState extends State<SchedulerPage> {
   final store = Modular.get<SchedulerStore>();
 
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +49,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.primary,
           child: Text('Submit'),
           onPressed: () {
             store.updateScheduler(context);
@@ -60,17 +62,18 @@ class _SchedulerPageState extends State<SchedulerPage> {
               padding: EdgeInsets.zero,
               scrollDirection: Axis.horizontal,
               child: WeekView(
-
                   scrollOffset: 0,
-                  weekDays: [
-                    if (!store.learnWeek!.sat.isHoliday) WeekDays.saturday,
-                    if (!store.learnWeek!.sun.isHoliday) WeekDays.sunday,
-                    if (!store.learnWeek!.mon.isHoliday) WeekDays.monday,
-                    if (!store.learnWeek!.tue.isHoliday) WeekDays.tuesday,
-                    if (!store.learnWeek!.wed.isHoliday) WeekDays.wednesday,
-                    if (!store.learnWeek!.thu.isHoliday) WeekDays.thursday,
-                    if (!store.learnWeek!.fri.isHoliday) WeekDays.friday,
-                  ],
+                  weekDays: store.learnWeek != null
+                      ? [
+                          if (!store.learnWeek!.sat.isHoliday) WeekDays.saturday,
+                          if (!store.learnWeek!.sun.isHoliday) WeekDays.sunday,
+                          if (!store.learnWeek!.mon.isHoliday) WeekDays.monday,
+                          if (!store.learnWeek!.tue.isHoliday) WeekDays.tuesday,
+                          if (!store.learnWeek!.wed.isHoliday) WeekDays.wednesday,
+                          if (!store.learnWeek!.thu.isHoliday) WeekDays.thursday,
+                          if (!store.learnWeek!.fri.isHoliday) WeekDays.friday,
+                        ]
+                      : WeekDays.values,
                   width: store.calcWeekdays() / 3 < 1
                       ? null
                       : MediaQuery.of(context).size.width * (store.calcWeekdays() / 3),
@@ -116,20 +119,23 @@ class _SchedulerPageState extends State<SchedulerPage> {
                     return Container();
                   },
                   onEventTap: (event, date) {
-                    event.forEach((element) {
-                      CalendarControllerProvider.of(context).controller.remove(element);
-                    });
+                    log("event is ${event[0]}");
+                    store.onEventTapped(context, event[0]);
                   },
                   maxDay: DateTime.now(),
                   minDay: DateTime.now(),
                   initialDay: DateTime.now(),
                   onDateLongPress: (date) {
-                    log("date is $date");
-
-                    store.handleDateLongPress(date);
+                    store.handleDateLongPress(context, date);
                   }),
             ),
           );
         }));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    store.controller.dispose();
   }
 }

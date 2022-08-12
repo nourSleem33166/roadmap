@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reaction_button/flutter_reaction_button.dart'
-    as flutterReactions;
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_reaction_button/flutter_reaction_button.dart' as flutterReactions;
 import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mobx/mobx.dart';
@@ -19,6 +19,7 @@ import 'package:roadmap/app/shared/widgets/component_template.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../generated/assets.dart';
+import '../../shared/theme/app_colors.dart';
 
 part 'comments_store.g.dart';
 
@@ -66,15 +67,13 @@ abstract class CommentsStoreBase with Store {
       commentsPagingController.appendLastPage(commentsPagination!.items);
     } else {
       final nextPageKey = pageKey + 1;
-      commentsPagingController.appendPage(
-          commentsPagination!.items, nextPageKey);
+      commentsPagingController.appendPage(commentsPagination!.items, nextPageKey);
     }
   }
 
   @action
   Future pickImage() async {
-    final xfile =
-        await ImagePicker.platform.getImage(source: ImageSource.gallery);
+    final xfile = await ImagePicker.platform.getImage(source: ImageSource.gallery);
     if (xfile != null) file = File(xfile.path);
   }
 
@@ -115,9 +114,7 @@ abstract class CommentsStoreBase with Store {
             lastName: user!.lastName,
             personalImage: user!.personalImage ?? "")));
 
-    _commentsRepo
-        .addComment(form.control('comment').value, refId!, file: file)
-        .then((value) {
+    _commentsRepo.addComment(form.control('comment').value, refId!, file: file).then((value) {
       commentsPagingController.itemList!.last = value;
       commentsPagingController.notifyListeners();
     });
@@ -135,9 +132,8 @@ abstract class CommentsStoreBase with Store {
         builder: (context) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(15),
-            child: Container(
-                height: 80.h,
-                child: RepliesPage(refId!, comment, _commentsRepo)),
+            child:
+                Container(height: 80.h, child: RepliesPage(refId!, comment, _commentsRepo)),
           );
         });
   }
@@ -146,24 +142,117 @@ abstract class CommentsStoreBase with Store {
     _commentsRepo.makeInteraction(refId!, comment.id, type);
   }
 
+  Future updateComment(Comment comment) async {
+    Modular.to
+        .pushNamed('/home/roadmapDetails/updateComment/', arguments: [comment]).then((value) {
+      if (value != null) {
+        final editedComment = value as Comment;
+        final oldCommentIndex = commentsPagingController.itemList!.indexOf(comment);
+
+        _commentsRepo
+            .updateComment(editedComment.text, refId!, comment.id, file: comment.file)
+            .then((value) {
+          if (value != null) {
+            commentsPagingController.itemList?[oldCommentIndex] = value;
+            commentsPagingController.notifyListeners();
+          }
+        });
+        commentsPagingController.itemList?[oldCommentIndex] = editedComment;
+        commentsPagingController.itemList?[oldCommentIndex].attachment = "nowLoading";
+        commentsPagingController.notifyListeners();
+
+      }
+    });
+  }
+
+  Future deleteComment(Comment comment) async {
+    _commentsRepo.deleteComment(refId!, comment.id).then((value) {
+      if (value) {
+        commentsPagingController.itemList!.remove(comment);
+        commentsPagingController.notifyListeners();
+      }
+    });
+  }
+
+  Future showEditDeleteDialog(BuildContext context, Comment comment) async {
+    showDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) => Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: Scaffold(
+                    body: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Icon(
+                          Icons.notifications,
+                          color: AppColors.primary,
+                          size: 50,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text('What do you want to do?'),
+                        Spacer(),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    updateComment(comment);
+                                  },
+                                  child: Text(
+                                    'Edit',
+                                    style: Theme.of(context).textTheme.bodyLarge,
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    deleteComment(comment);
+                                  },
+                                  child: Text(
+                                    'Delete',
+                                    style: Theme.of(context).textTheme.bodyLarge,
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                          ],
+                        )
+                      ]),
+                    ),
+                  )),
+            ));
+  }
+
   final reactionsList = [
     flutterReactions.Reaction(
-        icon: Image.asset(Assets.assetsLike, width: 50, height: 50),
-        value: 'Like'),
+        icon: Image.asset(Assets.assetsLike, width: 50, height: 50), value: 'Like'),
     flutterReactions.Reaction(
-        icon: Image.asset(Assets.assetsLove, width: 50, height: 50),
-        value: 'Love'),
+        icon: Image.asset(Assets.assetsLove, width: 50, height: 50), value: 'Love'),
     flutterReactions.Reaction(
-        icon: Image.asset(Assets.assetsHaha, width: 50, height: 50),
-        value: 'Haha'),
+        icon: Image.asset(Assets.assetsHaha, width: 50, height: 50), value: 'Haha'),
     flutterReactions.Reaction(
-        icon: Image.asset(Assets.assetsWow, width: 50, height: 50),
-        value: 'Wow'),
+        icon: Image.asset(Assets.assetsWow, width: 50, height: 50), value: 'Wow'),
     flutterReactions.Reaction(
-        icon: Image.asset(Assets.assetsSad, width: 50, height: 50),
-        value: 'Sad'),
+        icon: Image.asset(Assets.assetsSad, width: 50, height: 50), value: 'Sad'),
     flutterReactions.Reaction(
-        icon: Image.asset(Assets.assetsAngry, width: 50, height: 50),
-        value: 'Angry')
+        icon: Image.asset(Assets.assetsAngry, width: 50, height: 50), value: 'Angry')
   ];
 }

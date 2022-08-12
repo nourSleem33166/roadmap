@@ -54,8 +54,7 @@ class _CommentsPageState extends State<CommentsPage> {
                       width: 10,
                     ),
                     CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(store.user?.personalImage ?? ""),
+                      backgroundImage: NetworkImage(store.user?.personalImage ?? ""),
                       radius: 22,
                     ),
                     SizedBox(
@@ -133,157 +132,138 @@ class _CommentsPageState extends State<CommentsPage> {
   Widget buildComments() {
     return Observer(builder: (context) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: PagedListView<int, Comment>(
-          pagingController: store.commentsPagingController,
-          builderDelegate: PagedChildBuilderDelegate<Comment>(
-            itemBuilder: (context, item, index) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: commentItem(item),
-            ),
-          ),
-        ),
-      );
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: PagedListView<int, Comment>(
+              pagingController: store.commentsPagingController,
+              builderDelegate: PagedChildBuilderDelegate<Comment>(
+                  itemBuilder: (context, item, index) => Padding(
+                      padding: const EdgeInsets.all(8.0), child: commentItem(item)))));
     });
   }
 
   Widget commentItem(Comment comment) {
     comment.learner.personalImage =
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwclg60fm6EHOyIjBqSqdxAD7i1yNPPGeOJQ&usqp=CAU';
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: NetworkImage(comment.learner.personalImage),
-            ),
-            SizedBox(
-              width: 15,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.black12),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            comment.learner.firstName +
-                                " " +
-                                comment.learner.lastName,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-
-                          Text(
-                            comment.text,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(fontSize: 15),
-                          ),
-                          Visibility(
-                              visible: comment.attachment != null,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Visibility(
-                                    visible: comment.attachment != "nowLoading",
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: Image.network(
-                                        comment.attachment ?? "",
-                                        loadingBuilder:
-                                            (context, child, progress) {
-                                          if (progress == null) return child;
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        },
+    return InkWell(
+      onLongPress: comment.learnerId == store.user!.id
+          ? () {
+              store.showEditDeleteDialog(context, comment);
+            }
+          : null,
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 25,
+                backgroundImage: NetworkImage(comment.learner.personalImage),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15), color: Colors.black12),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              comment.learner.firstName + " " + comment.learner.lastName,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            Text(
+                              comment.text,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(fontSize: 15),
+                            ),
+                            Visibility(
+                                visible: comment.attachment != null,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Visibility(
+                                      visible: comment.attachment != "nowLoading",
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Image.network(
+                                          comment.attachment ?? "",
+                                          loadingBuilder: (context, child, progress) {
+                                            if (progress == null) return child;
+                                            return Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      replacement: Center(
+                                        child: CircularProgressIndicator(),
                                       ),
                                     ),
-                                    replacement: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                        ],
+                                  ],
+                                )),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Observer(builder: (context) {
-                        return Text(
-                            comment.interactionValue.value?.type ?? "Like",
-                            style: comment.interactionValue.value != null
-                                ? Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                        color: getReactionTextColor(
-                                            comment.interactionValue.value))
-                                : Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        color: getReactionTextColor(
-                                            comment.interactionValue.value)));
-                      }),
-                      ReactionButton(
-                          boxReactionSpacing: 15,
-                          boxPosition: VerticalPosition.TOP,
-                          boxRadius: 40,
-                          boxPadding: EdgeInsets.all(10),
-                          itemScale: 0.5,
-                          initialReaction:
-                              comment.interactionValue.value?.type != null
-                                  ? store.reactionsList.singleWhere((element) =>
-                                      element.value ==
-                                      comment.interactionValue.value?.type)
-                                  : null,
-                          onReactionChanged: (reaction) {
-                            store.onReactionChanged(
-                                comment, reaction.toString());
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Observer(builder: (context) {
+                          return Text(comment.interactionValue.value?.type ?? "Like",
+                              style: comment.interactionValue.value != null
+                                  ? Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: getReactionTextColor(
+                                          comment.interactionValue.value))
+                                  : Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                      color: getReactionTextColor(
+                                          comment.interactionValue.value)));
+                        }),
+                        ReactionButton(
+                            boxReactionSpacing: 15,
+                            boxPosition: VerticalPosition.TOP,
+                            boxRadius: 40,
+                            boxPadding: EdgeInsets.all(10),
+                            itemScale: 0.5,
+                            initialReaction: comment.interactionValue.value?.type != null
+                                ? store.reactionsList.singleWhere((element) =>
+                                    element.value == comment.interactionValue.value?.type)
+                                : null,
+                            onReactionChanged: (reaction) {
+                              store.onReactionChanged(comment, reaction.toString());
+                            },
+                            reactions: store.reactionsList),
+                        InkWell(
+                          onTap: () {
+                            store.goToReplies(comment, context);
                           },
-                          reactions: store.reactionsList),
-                      InkWell( onTap: (){
-                        store.goToReplies(comment, context);
-                      },
-                        child: Text(
-                            'Reply',
-                            style:Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                              fontWeight: FontWeight.bold,
-                                color: Colors.black45)),
-                      )
-
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ],
+                          child: Text('Reply',
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  fontWeight: FontWeight.bold, color: Colors.black45)),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -311,10 +291,7 @@ class _CommentsPageState extends State<CommentsPage> {
         children: [
           Text(
             'Comments',
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: AppColors.primary),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.primary),
           ),
           Divider(),
         ],

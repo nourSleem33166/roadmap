@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:roadmap/app/modules/company/company_repo.dart';
@@ -31,9 +33,6 @@ abstract class RoadmapStoreBase with Store {
     getData();
   }
 
-
-
-
   @action
   Future<void> getData() async {
     try {
@@ -54,9 +53,25 @@ abstract class RoadmapStoreBase with Store {
   }
 
   void goToRoadmapGraph() {
-    Modular.to.pushNamed('/home/roadmapDetails/roadmapGraph/', arguments: [roadmapId]);
+    Modular.to.pushNamed('/home/roadmapDetails/roadmapGraph/', arguments: [roadmapId, false]);
   }
-  void navigateToScheduler() {
-    Modular.to.pushNamed('/home/scheduler/', arguments: [roadmapId]);
+
+  void startLearningRoadmapGraph() async {
+    final res = await navigateToScheduler();
+    log("res is $res");
+    if (res == true) {
+      _roadmapRepo.startLearnRoadmap(roadmapId).then((value) {
+        continueLearning();
+      });
+    }
+  }
+
+  void continueLearning() {
+    Modular.to.pushNamed('/home/roadmapDetails/roadmapGraph/', arguments: [roadmapId, true]);
+  }
+
+  Future<bool?> navigateToScheduler() async {
+    final res = await Modular.to.pushNamed('/home/scheduler/', arguments: [roadmapId]);
+    return res as bool?;
   }
 }

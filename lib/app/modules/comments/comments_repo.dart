@@ -62,21 +62,24 @@ class CommentsRepo {
     throw AppException.unknown();
   }
 
-  Future<bool> updateComment(String text, String refId, String commentId,
+  Future<Comment?> updateComment(String text, String refId, String commentId,
       {File? file}) async {
     final result =
-        await _dio.patch("$_route/$refId/comments/$commentId", data: {
-      'text': text,
-      if (file != null) 'attachment': await MultipartFile.fromFile(file.path)
-    });
+        await _dio.patch("$_route/$refId/comments/$commentId", data: FormData.fromMap(
+            {
+              'text': text,
+              if (file != null) 'attachment': await MultipartFile.fromFile(file.path)
+            }
+        ));
+    final user = await SharedPreferencesHelper.getUser();
+
     if (result.statusCode == 200)
-      return true;
-    else
-      return false;
+      return Comment.fromJson(result.data,user!);
+    throw AppException.unknown();
   }
 
   Future<bool> deleteComment(String refId, String commentId) async {
-    final result = await _dio.delete("$_route/$refId/comments/$commentId");
+    final result = await _dio.delete("$_route/$refId/comments/$commentId",data: {});
     if (result.statusCode == 200)
       return true;
     else

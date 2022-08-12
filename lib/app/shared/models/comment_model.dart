@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:mobx/mobx.dart';
 import 'package:roadmap/app/shared/models/user.dart';
@@ -21,7 +22,8 @@ class Comment {
       required this.roadmapId,
       required this.parentId,
       required this.learner,
-      required this.interactionValue});
+      required this.interactionValue,
+      this.file});
 
   late String id;
   late String text;
@@ -34,13 +36,25 @@ class Comment {
   String? parentId;
   late final Learner learner;
   late Observable<Interaction?> interactionValue;
+  File? file;
+
+  factory Comment.copyWith(Comment comment) {
+    return Comment(
+        id: comment.id,
+        text: comment.text,
+        interactions: comment.interactions,
+        learnerId: comment.learnerId,
+        roadmapId: comment.roadmapId,
+        parentId: comment.parentId,
+        learner: comment.learner,
+        interactionValue: comment.interactionValue);
+  }
 
   Comment.fromJson(Map<String, dynamic> json, [User? user]) {
     id = json['_id'];
     text = json['text'];
     attachment = json['attachment'];
-    interactions =
-        List.castFrom<dynamic, CommentInteraction>(json['interactions']);
+    interactions = List.castFrom<dynamic, CommentInteraction>(json['interactions']);
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     learnerId = json['learnerId'];

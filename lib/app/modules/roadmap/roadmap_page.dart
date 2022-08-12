@@ -184,7 +184,10 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
                   ElevatedButton(
                       onPressed: () {
                         if (store.roadmap?.learnStatus == LearnStatus.None) {
-                          store.navigateToScheduler();
+                          store.startLearningRoadmapGraph();
+                        }
+                        else   if (store.roadmap?.learnStatus == LearnStatus.Learning) {
+                          store.continueLearning();
                         }
                       },
                       child: Padding(

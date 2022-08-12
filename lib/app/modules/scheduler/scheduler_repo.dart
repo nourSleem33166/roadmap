@@ -7,9 +7,9 @@ class SchedulerRepo {
 
   SchedulerRepo(this._dio);
 
-  Future<LearnWeek> getScheduler() async {
+  Future<SchedulerModel> getScheduler() async {
     final response = await _dio.get('learner/profile/scheduler');
-    if (response.statusCode == 200) return LearnWeek.fromJson(response.data);
+    if (response.statusCode == 200) return SchedulerModel.fromJson(response.data);
     throw AppException.unknown();
   }
 

@@ -37,24 +37,21 @@ class AppWidget extends StatelessWidget {
                 controller.forgetSavedTheme();
               }
             },
-            child: CalendarControllerProvider(
-              controller: EventController(),
-              child: ThemeConsumer(
-                  child: Builder(
-                      builder: (themeContext) => MaterialApp.router(
-                          routerDelegate: Modular.routerDelegate,
-                          routeInformationParser: Modular.routeInformationParser,
-                          title: "Roadmap",
-                          debugShowCheckedModeBanner: false,
-                          builder: (context, child) {
-                            child = botToastBuilder(context, child);
-                            return child;
-                          },
-                          localizationsDelegates: context.localizationDelegates,
-                          supportedLocales: context.supportedLocales,
-                          locale: context.locale,
-                          color: AppColors.primary,
-                          theme: ThemeProvider.themeOf(themeContext).data))),
-            )));
+            child: ThemeConsumer(
+                child: Builder(
+                    builder: (themeContext) => MaterialApp.router(
+                        routerDelegate: Modular.routerDelegate,
+                        routeInformationParser: Modular.routeInformationParser,
+                        title: "Roadmap",
+                        debugShowCheckedModeBanner: false,
+                        builder: (context, child) {
+                          child = botToastBuilder(context, child);
+                          return child;
+                        },
+                        localizationsDelegates: context.localizationDelegates,
+                        supportedLocales: context.supportedLocales,
+                        locale: context.locale,
+                        color: AppColors.primary,
+                        theme: ThemeProvider.themeOf(themeContext).data)))));
   }
 }

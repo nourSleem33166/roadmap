@@ -7,10 +7,10 @@ import 'package:roadmap/app/shared/models/roadmap.dart';
 import '../../shared/exceptions/app_exception_handler.dart';
 import '../../shared/models/company.dart';
 
-class ExploreRepo {
+class ProfileRepo {
   Dio _dio;
 
-  ExploreRepo(this._dio);
+  ProfileRepo(this._dio);
 
   Future<PaginationModel<RoadmapModel>> getRoadmaps(int page, int pageSize) async {
     final result = await _dio
