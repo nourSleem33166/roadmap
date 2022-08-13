@@ -51,16 +51,37 @@ class _ExamPageState extends State<ExamPage> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              store.examResult['examPassed']
+                  ? Image.asset('assets/tada.gif')
+                  : SizedBox.shrink(),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 children: [
                   Spacer(),
                   Text(
-                    'Exam Passed: ${store.examResult['examPassed'] ? "Yes" : "No"}',
+                    '${store.examResult['examPassed'] ? "Passed" : "Not Passed"}',
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 30),
                   ),
                   Spacer(),
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Spacer(),
+                  Expanded(
+                    child: ElevatedButton(onPressed: () {
+                      Modular.to.pop(true);
+                    },child: Text('Ok'),),
+                  ),
+                  Spacer(),
+
+                ],
+              )
             ],
           );
         }

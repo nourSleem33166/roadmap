@@ -142,7 +142,6 @@ abstract class RoadmapGraphStoreBase with Store {
                 (passedExam) {
               if (passedExam != null) {
                 if (passedExam as bool) {
-                  showSuccessToast('Exam Passed Successfully');
                   getData();
                 } else {
                   showErrorToast('Exam Not Passed');
@@ -155,4 +154,9 @@ abstract class RoadmapGraphStoreBase with Store {
       }
     });
   }
+
+  void downloadCertificate(){
+
+  }
+
 }

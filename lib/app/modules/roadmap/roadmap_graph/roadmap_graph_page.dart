@@ -27,7 +27,14 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Observer(builder: (context) {
+    return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+
+          },child: Text('Download Certificate'),
+        ),
+
+        body: Observer(builder: (context) {
       return ComponentTemplate(
           state: store.pageState,
           screen: Stack(children: [

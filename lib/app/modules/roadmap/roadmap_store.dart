@@ -8,6 +8,8 @@ import 'package:roadmap/app/shared/exceptions/app_exception.dart';
 import 'package:roadmap/app/shared/models/company.dart';
 import 'package:roadmap/app/shared/models/department.dart';
 import 'package:roadmap/app/shared/models/roadmap.dart';
+import 'package:roadmap/app/shared/services/pdf_service.dart';
+import 'package:roadmap/app/shared/toasts/loading_toast.dart';
 import 'package:roadmap/app/shared/toasts/messages_toasts.dart';
 import 'package:roadmap/app/shared/widgets/component_template.dart';
 
@@ -73,5 +75,18 @@ abstract class RoadmapStoreBase with Store {
   Future<bool?> navigateToScheduler() async {
     final res = await Modular.to.pushNamed('/home/scheduler/', arguments: [roadmapId]);
     return res as bool?;
+  }
+
+  Future getCertificate() async {
+    showLoading();
+    final url = await _roadmapRepo.getCertificate(roadmapId);
+    if (url == null) {
+      showToast('No Certificate Available');
+      return;
+    }
+    final file = await loadPdfFromNetwork(url);
+    closeLoading();
+    Modular.to
+        .pushNamed('/home/roadmapDetails/cert/', arguments: [file, url, roadmap!.title]);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:roadmap/app/modules/comments/replies/replies_store.dart';
 import 'package:roadmap/app/modules/comments/update_comment_page.dart';
 import 'package:roadmap/app/modules/company/company_repo.dart';
+import 'package:roadmap/app/modules/roadmap/certificate_page.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_exam/roadmap_exam_page.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_exam/roadmap_exam_store.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_graph/roadmap_graph_page.dart';
@@ -29,5 +30,7 @@ class RoadmapModule extends Module {
     ChildRoute('/roadmapGraph/', child: (_, args) => RoadmapGraphPage()),
     ChildRoute('/exam/', child: (_, args) => ExamPage()),
     ChildRoute('/updateComment/', child: (_, args) => UpdateCommentPage(args.data[0])),
+    ChildRoute('/cert/',
+        child: (_, args) => CertificatePage(args.data[0], args.data[1], args.data[2])),
   ];
 }

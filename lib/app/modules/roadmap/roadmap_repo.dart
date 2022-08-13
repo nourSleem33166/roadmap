@@ -70,8 +70,14 @@ class RoadmapRepo {
   Future<ExamClass?> getActiveExam() async {
     final result = await _dio.get("/learn/activeExam");
     if (result.statusCode == 200) {
-      if(result.data!=null)
-      return ExamClass.fromJson(result.data);
+      if (result.data != null) return ExamClass.fromJson(result.data);
+    }
+  }
+
+  Future<String?> getCertificate(String roadmapId) async {
+    final result = await _dio.get("/learn/$roadmapId/cert");
+    if (result.statusCode == 200) {
+      if (result.data != null) return result.data['certificateUrl'] ?? null;
     }
   }
 }

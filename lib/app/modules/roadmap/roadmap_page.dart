@@ -23,6 +23,7 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
+
         body: Observer(builder: (context) {
           return ComponentTemplate(
             state: store.pageState,
@@ -172,7 +173,7 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30), topLeft: Radius.circular(30))),
             child: Container(
-              width: MediaQuery.of(context).size.width / 2.5,
+              width: MediaQuery.of(context).size.width / 2.4,
               height: 60,
               decoration: BoxDecoration(
                   color: AppColors.white,
@@ -189,6 +190,9 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
                         else   if (store.roadmap?.learnStatus == LearnStatus.Learning) {
                           store.continueLearning();
                         }
+                        else {
+                          store.getCertificate();
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(1),
@@ -196,7 +200,7 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
                           store.roadmap?.learnStatus == LearnStatus.None
                               ? 'Schedule To Me'
                               : store.roadmap?.learnStatus == LearnStatus.Learned
-                                  ? 'Learned ✔'
+                                  ? 'Get My Certificate'
                                   : 'Learning Now ⌛',
                           style: theme.textTheme.bodyText1!
                               .copyWith(fontSize: 14, color: AppColors.white),
