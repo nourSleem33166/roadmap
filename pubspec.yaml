@@ -34,7 +34,6 @@ dependencies:
   flutter_mobx: ^2.0.6+1
   easy_localization: ^3.0.1
   theme_provider: ^0.5.0
-  flutter_launcher_icons: ^0.9.3
   flutter_native_splash: ^2.2.3+1
   dio: ^4.0.6
   bot_toast: ^4.0.2
@@ -61,18 +60,19 @@ dependencies:
   flutter_pdfview: ^1.2.3
   http: ^0.13.5
   permission_handler: ^10.0.0
+  syncfusion_flutter_pdfviewer: ^20.2.43-beta
+
 dev_dependencies:
   mobx_codegen: ^2.0.7
   build_runner: ^2.1.11
+  flutter_launcher_icons: "^0.10.0"
 
 flutter_icons:
-  android: true
+  android: "launcher_icon"
   ios: true
-  image_path_android: "assets/logo_710x599.png"
-  image_path_ios: "assets/logo_1024x1024.png"
-  adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/logo_foreground_432x432.png"
-  remove_alpha_ios: true
+  image_path: "assets/icon.png"
+  min_sdk_android: 21
+
 
 flutter_native_splash:
   color: "#ffffff"

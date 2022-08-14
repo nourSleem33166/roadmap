@@ -35,88 +35,97 @@ class _SchedulerPageState extends State<SchedulerPage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text('Submit',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white)),
+                style:
+                    Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white)),
           ),
           onPressed: () {
             store.updateScheduler(context);
           },
         ),
-        body: Observer(builder: (context) {
-          return ComponentTemplate(
-            state: store.componentState,
-            screen: SingleChildScrollView(
-              padding: EdgeInsets.zero,
-              scrollDirection: Axis.horizontal,
-              child: WeekView(
-                  scrollOffset: 0,
-                  weekDays: store.learnWeek != null
-                      ? [
-                          if (!store.learnWeek!.sat.isHoliday) WeekDays.saturday,
-                          if (!store.learnWeek!.sun.isHoliday) WeekDays.sunday,
-                          if (!store.learnWeek!.mon.isHoliday) WeekDays.monday,
-                          if (!store.learnWeek!.tue.isHoliday) WeekDays.tuesday,
-                          if (!store.learnWeek!.wed.isHoliday) WeekDays.wednesday,
-                          if (!store.learnWeek!.thu.isHoliday) WeekDays.thursday,
-                          if (!store.learnWeek!.fri.isHoliday) WeekDays.friday,
-                        ]
-                      : WeekDays.values,
-                  width: store.calcWeekdays() / 3 < 1
-                      ? null
-                      : MediaQuery.of(context).size.width * (store.calcWeekdays() / 3),
-                  showWeekends: true,
-                  weekDayBuilder: (date) {
-                    return Center(
-                        child: Text(
-                      DateFormat('EEE').format(date),
-                      style: date.weekday == DateTime.now().weekday
-                          ? Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(color: AppColors.primary)
-                          : Theme.of(context).textTheme.bodyMedium,
-                    ));
-                  },
-                  eventTileBuilder: (weekDate, eventList, rect, startTime, endTime) {
-                    return Column(
-                      children: eventList
-                          .map((e) => Container(
-                                width: rect.width,
-                                height: rect.height,
-                                child: Card(
-                                    color: e.color,
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          e.title,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(color: AppColors.white),
+        body: Center(
+          child: Observer(builder: (context) {
+            return ComponentTemplate(
+              state: store.componentState,
+              screen: SingleChildScrollView(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                child: WeekView(
+                    scrollOffset: 0,
+                    weekDays: store.learnWeek != null
+                        ? [
+                            if (!store.learnWeek!.sat.isHoliday) WeekDays.saturday,
+                            if (!store.learnWeek!.sun.isHoliday) WeekDays.sunday,
+                            if (!store.learnWeek!.mon.isHoliday) WeekDays.monday,
+                            if (!store.learnWeek!.tue.isHoliday) WeekDays.tuesday,
+                            if (!store.learnWeek!.wed.isHoliday) WeekDays.wednesday,
+                            if (!store.learnWeek!.thu.isHoliday) WeekDays.thursday,
+                            if (!store.learnWeek!.fri.isHoliday) WeekDays.friday,
+                          ]
+                        : WeekDays.values,
+                    width: store.calcWeekdays() / 3 < 1
+                        ? null
+                        : MediaQuery.of(context).size.width * (store.calcWeekdays() / 3),
+                    showWeekends: true,
+                    weekDayBuilder: (date) {
+                      return Center(
+                          child: Text(
+                        DateFormat('EEE', 'en').format(date),
+                        style: date.weekday == DateTime.now().weekday
+                            ? Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(color: AppColors.primary)
+                            : Theme.of(context).textTheme.bodyMedium,
+                      ));
+                    },
+                    timeLineBuilder: (date) {
+                      return Center(
+                        child: Text(DateFormat.jm('en').format(date)),
+                      );
+                    },
+                    eventTileBuilder: (weekDate, eventList, rect, startTime, endTime) {
+                      return Column(
+                        children: eventList
+                            .map((e) => Container(
+                                  width: rect.width,
+                                  height: rect.height,
+                                  child: Card(
+                                      color: e.color,
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            e.title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .copyWith(color: AppColors.white),
+                                          ),
                                         ),
-                                      ),
-                                    )),
-                              ))
-                          .toList(),
-                    );
-                  },
-                  heightPerMinute: 1,
-                  weekPageHeaderBuilder: (_, __) {
-                    return Container();
-                  },
-                  onEventTap: (event, date) {
-                    log("event is ${event[0]}");
-                    store.onEventTapped(context, event[0]);
-                  },
-                  maxDay: DateTime.now(),
-                  minDay: DateTime.now(),
-                  initialDay: DateTime.now(),
-                  onDateLongPress: (date) {
-                    store.handleDateLongPress(context, date);
-                  }),
-            ),
-          );
-        }));
+                                      )),
+                                ))
+                            .toList(),
+                      );
+                    },
+                    heightPerMinute: 1,
+                    weekPageHeaderBuilder: (_, __) {
+                      return Container();
+                    },
+                    onEventTap: (event, date) {
+                      log("event is ${event[0]}");
+                      store.onEventTapped(context, event[0]);
+                    },
+                    maxDay: DateTime.now(),
+                    minDay: DateTime.now(),
+                    initialDay: DateTime.now(),
+
+                    onDateLongPress: (date) {
+                      store.handleDateLongPress(context, date);
+                    }),
+              ),
+            );
+          }),
+        ));
   }
 
   @override

@@ -16,7 +16,7 @@ import '../comments/comments_store.dart';
 class RoadmapModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => RoadmapStore(i.get<RoadmapRepo>(), i.get<CompanyRepo>(), i.args.data[0])),
+    Bind.factory((i) => RoadmapStore(i.get<RoadmapRepo>(), i.get<CompanyRepo>(), i.args.data[0])),
     Bind.factory(
         (i) => RoadmapGraphStore(i.get<RoadmapRepo>(), i.args.data[0], i.args.data[1])),
     Bind((i) => CommentsStore(), isSingleton: false, isLazy: true),

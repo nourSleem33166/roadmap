@@ -24,24 +24,26 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        body: Observer(builder: (context) {
-          return ComponentTemplate(
-            state: store.pageState,
-            onRetry: () => store.getData(store.companyId),
-            screen: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                upperSection(context),
-                Expanded(
-                    child: SingleChildScrollView(
-                  child: store.selectedViewIndex == 0
-                      ? _buildAbout(context)
-                      : _buildDepts(context),
-                ))
-              ],
-            ),
-          );
-        }),
+        body: Center(
+          child: Observer(builder: (context) {
+            return ComponentTemplate(
+              state: store.pageState,
+              onRetry: () => store.getData(store.companyId),
+              screen: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  upperSection(context),
+                  Expanded(
+                      child: SingleChildScrollView(
+                    child: store.selectedViewIndex == 0
+                        ? _buildAbout(context)
+                        : _buildDepts(context),
+                  ))
+                ],
+              ),
+            );
+          }),
+        ),
       ),
     );
   }
@@ -196,6 +198,7 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                                                   child: Text(dept.description,
                                                       style: theme.textTheme.bodyText2!
                                                           .copyWith(
+                                                        overflow: TextOverflow.ellipsis,
                                                               color: AppColors.white
                                                                   .withOpacity(0.8))))
                                             ]))

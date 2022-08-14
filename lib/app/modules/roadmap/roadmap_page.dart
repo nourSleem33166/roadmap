@@ -24,19 +24,21 @@ class _RoadmapPageState extends ModularState<RoadmapPage, RoadmapStore> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
 
-        body: Observer(builder: (context) {
-          return ComponentTemplate(
-            state: store.pageState,
-            onRetry: () => store.getData(),
-            screen: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                upperSection(context),
-                Expanded(child: SingleChildScrollView(child: _buildAbout(context)))
-              ],
-            ),
-          );
-        }),
+        body: Center(
+          child: Observer(builder: (context) {
+            return ComponentTemplate(
+              state: store.pageState,
+              onRetry: () => store.getData(),
+              screen: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  upperSection(context),
+                  Expanded(child: SingleChildScrollView(child: _buildAbout(context)))
+                ],
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

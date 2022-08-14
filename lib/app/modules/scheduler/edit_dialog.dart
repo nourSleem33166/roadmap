@@ -60,6 +60,7 @@ class _EditDatePageState extends State<EditDatePage> {
                     ),
                   ],
                 )),
+            Spacer(),
             ElevatedButton(
                 onPressed: () {
                   final startDate = DateTime.now()
@@ -80,7 +81,8 @@ class _EditDatePageState extends State<EditDatePage> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
-                        .copyWith(color: AppColors.white)))
+                        .copyWith(color: AppColors.white))),
+            SizedBox(height: 20,)
           ],
         ),
       ),

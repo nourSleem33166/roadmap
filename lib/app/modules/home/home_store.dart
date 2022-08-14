@@ -21,7 +21,7 @@ abstract class HomeStoreBase with Store {
 
   navigateToProfile() {
     if (!Modular.to.path.contains('profile'))
-      Modular.to.pushNamed('/home/profile/');
+      Modular.to.navigate('/home/profile/');
   }
 
   navigateToExplore() {

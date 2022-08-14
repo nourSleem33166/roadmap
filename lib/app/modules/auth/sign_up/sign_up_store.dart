@@ -24,7 +24,7 @@ abstract class SignUpStoreBase with Store {
     'lastName': FormControl<String>(validators: [Validators.required]),
     'email': FormControl<String>(validators: [Validators.required, Validators.email]),
     'password':
-        FormControl<String>(validators: [Validators.required, Validators.minLength(4)]),
+        FormControl<String>(validators: [Validators.required, Validators.minLength(3)]),
     'workDomain': FormControl<WorkDomain>(validators: [Validators.required]),
     'bio': FormControl<String>(validators: [Validators.required]),
     'functionalName': FormControl<String>(validators: [Validators.required]),
@@ -90,7 +90,8 @@ abstract class SignUpStoreBase with Store {
   Future<void> signUp() async {
     try {
       showLoading();
-      final userSignedUp = await _authRepo.signup(form.value);
+      final userSignedUp = await _authRepo.signup(form.value,
+          personalImage: profileImage, coverImage: coverImage);
       if (userSignedUp) {
         Modular.to.pushNamedAndRemoveUntil('/home/', (p0) => false);
       }

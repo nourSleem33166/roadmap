@@ -21,25 +21,31 @@ class _FollowedCompaniesPageState extends State<FollowedCompaniesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Followed Companies')),
-      body: Observer(builder: (context) {
-        return ComponentTemplate(
-          state: store.pageState,
-          screen: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(children: [
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: store.followedCompanies.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: companyItem(context, store.followedCompanies[index]),
-                        );
-                      }))
-            ]),
-          ),
-        );
-      }),
+      body: Center(
+        child: Observer(builder: (context) {
+          return ComponentTemplate(
+            state: store.pageState,
+            screen: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(children: [
+                Expanded(
+                    child: store.followedCompanies.isEmpty
+                        ? Center(
+                            child: Text('No Followed Companies'),
+                          )
+                        : ListView.builder(
+                            itemCount: store.followedCompanies.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: companyItem(context, store.followedCompanies[index]),
+                              );
+                            }))
+              ]),
+            ),
+          );
+        }),
+      ),
     );
   }
 

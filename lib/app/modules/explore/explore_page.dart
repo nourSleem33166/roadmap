@@ -58,7 +58,9 @@ class _ExplorePageState extends ModularState<ExplorePage, ExploreStore> {
                   )),
             ];
           },
-          body: Column(children: [
+          body: Column(
+
+              children: [
             Row(mainAxisSize: MainAxisSize.max, children: [
               Observer(builder: (context) {
                 return Expanded(
@@ -72,7 +74,7 @@ class _ExplorePageState extends ModularState<ExplorePage, ExploreStore> {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
-                                .copyWith(color: AppColors.gold, fontSize: 14)),
+                                .copyWith(color: AppColors.gold, fontSize: 13)),
                         selectedColor: AppColors.gold,
                       ),
 
@@ -83,28 +85,35 @@ class _ExplorePageState extends ModularState<ExplorePage, ExploreStore> {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
-                                .copyWith(color: theme.primaryColor, fontSize: 14)),
+                                .copyWith(color: theme.primaryColor, fontSize: 13)),
                         selectedColor: theme.primaryColor,
                       ),
                     ],
                     margin: EdgeInsets.all(5),
                     itemPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 60),
-                    itemShape:
-                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                    itemShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                   ),
                 );
               }),
             ]),
+            Observer(builder: (context) {
+              return ComponentTemplate(
+                state: store.componentState,
+                screen: Expanded(
+                    child: store.selectedExplore == ExploreType.Roadmaps
+                        ? roadmapsList(context)
+                        : companiesList(context)),
+              );
+            }),
             Observer(
-              builder: (context) {
-                return ComponentTemplate(
-                  state: store.componentState,
-                  screen: Expanded(
-                      child: store.selectedExplore == ExploreType.Roadmaps
-                          ? roadmapsList(context)
-                          : companiesList(context)),
-                );
-              }
+              builder: (BuildContext context) {
+                if (store.isCompanyLoading || store.isLoading)
+                  return LinearProgressIndicator(
+                    minHeight: 3,
+                  );
+                else
+                  return SizedBox.shrink();
+              },
             )
           ]),
         ));
@@ -252,7 +261,9 @@ class _ExplorePageState extends ModularState<ExplorePage, ExploreStore> {
                     ),
                     Row(
                       children: [
-                        _buildInfoItem(context, DateFormat('yyyy MMM dd').format(roadmap.createdAt),
+                        _buildInfoItem(
+                            context,
+                            DateFormat('yyyy MMM dd','en').format(roadmap.createdAt),
                             FontAwesomeIcons.calendarMinus),
                       ],
                     ),
@@ -332,7 +343,7 @@ class _ExplorePageState extends ModularState<ExplorePage, ExploreStore> {
                   right: 1,
                   left: 1,
                   child: Text(
-                    company.workDomain?.text??"",
+                    company.workDomain?.text ?? "",
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyText2!.copyWith(color: AppColors.white),
                   ),

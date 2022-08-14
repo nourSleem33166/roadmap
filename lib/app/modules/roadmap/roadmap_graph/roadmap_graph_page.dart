@@ -28,70 +28,72 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Observer(builder: (context) {
-      return ComponentTemplate(
-          state: store.pageState,
-          screen: Stack(children: [
-            Positioned.fill(
-              child: Image.asset(
-                Assets.assetsBackground,
-                color: AppColors.primary.withOpacity(0.1),
-                fit: BoxFit.fill,
-              ),
-            ),
-            Observer(builder: (context) {
-              return Column(mainAxisSize: MainAxisSize.max, children: [
-                SizedBox(
-                  height: 40,
+    return Scaffold(body: Center(
+      child: Observer(builder: (context) {
+        return ComponentTemplate(
+            state: store.pageState,
+            screen: Stack(children: [
+              Positioned.fill(
+                child: Image.asset(
+                  Assets.assetsBackground,
+                  color: AppColors.primary.withOpacity(0.1),
+                  fit: BoxFit.fill,
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              ),
+              Observer(builder: (context) {
+                return Column(mainAxisSize: MainAxisSize.max, children: [
                   SizedBox(
-                    width: 10,
+                    height: 40,
                   ),
-                  Flexible(
-                    child: Text("${store.roadmap!.title} Roadmap ",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontWeight: FontWeight.bold)),
-                  ),
-                  Spacer(),
-                  ElevatedButton(
-                      onPressed: () {
-                        store.goToComments(context);
-                      },
-                      child: Icon(Icons.message, color: AppColors.white, size: 20)),
-                  SizedBox(width: 10)
-                ]),
-                Observer(builder: (context) {
-                  return Expanded(
-                      child: InteractiveViewer(
-                          constrained: false,
-                          scaleEnabled: true,
-                          boundaryMargin: EdgeInsets.all(1000),
-                          minScale: 0.01,
-                          maxScale: 5.6,
-                          child: GraphView(
-                              graph: store.graph,
-                              animated: true,
-                              algorithm: SugiyamaAlgorithm(store.builder),
-                              paint: Paint()
-                                ..color = Color(0xff323232)
-                                ..strokeWidth = 2
-                                ..isAntiAlias = false
-                                ..style = PaintingStyle.stroke,
-                              builder: (Node node) {
-                                String value = node.key!.value;
-                                return buildNode(
-                                    context,
-                                    store.nodes
-                                        .singleWhere((element) => element.id == value));
-                              })));
-                })
-              ]);
-            })
-          ]));
-    }));
+                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                      child: Text("${store.roadmap!.title} Roadmap ",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(fontWeight: FontWeight.bold)),
+                    ),
+                    Spacer(),
+                    ElevatedButton(
+                        onPressed: () {
+                          store.goToComments(context);
+                        },
+                        child: Icon(Icons.message, color: AppColors.white, size: 20)),
+                    SizedBox(width: 10)
+                  ]),
+                  Observer(builder: (context) {
+                    return Expanded(
+                        child: InteractiveViewer(
+                            constrained: false,
+                            scaleEnabled: true,
+                            boundaryMargin: EdgeInsets.all(1000),
+                            minScale: 0.01,
+                            maxScale: 5.6,
+                            child: GraphView(
+                                graph: store.graph,
+                                animated: true,
+                                algorithm: BuchheimWalkerAlgorithm(store.builder,TreeEdgeRenderer(store.builder)),
+                                paint: Paint()
+                                  ..color = Color(0xff323232)
+                                  ..strokeWidth = 2
+                                  ..isAntiAlias = false
+                                  ..style = PaintingStyle.stroke,
+                                builder: (Node node) {
+                                  String value = node.key!.value;
+                                  return buildNode(
+                                      context,
+                                      store.nodes
+                                          .singleWhere((element) => element.id == value));
+                                })));
+                  })
+                ]);
+              })
+            ]));
+      }),
+    ));
   }
 
   Widget sectionNode(BuildContext context, RoadmapNode node) {

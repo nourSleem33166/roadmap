@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_exam/roadmap_exam_store.dart';
@@ -13,6 +14,12 @@ class ExamPage extends StatefulWidget {
 
 class _ExamPageState extends State<ExamPage> {
   final store = Modular.get<ExamStore>();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    store.timer = store.initTimer(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +52,47 @@ class _ExamPageState extends State<ExamPage> {
             .where((element) => element.isPassed.value == null)
             .toList();
 
-        if (notPassedLevels.isNotEmpty)
+        if (notPassedLevels.isNotEmpty) {
+          if (store.levelResult['levelPassed'] == false) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Spacer(),
+                    Text(
+                      "Not Passed",
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 30),
+                    ),
+                    Spacer(),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Spacer(),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Modular.to.pop(true);
+                        },
+                        child: Text('Ok'),
+                      ),
+                    ),
+                    Spacer(),
+                  ],
+                )
+              ],
+            );
+          }
           return levelWidget(context, notPassedLevels[0]);
-        else {
+        } else {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              store.examResult['examPassed']
+              store.levelResult['examPassed']
                   ? Image.asset('assets/tada.gif')
                   : SizedBox.shrink(),
               SizedBox(
@@ -61,7 +102,7 @@ class _ExamPageState extends State<ExamPage> {
                 children: [
                   Spacer(),
                   Text(
-                    '${store.examResult['examPassed'] ? "Passed" : "Not Passed"}',
+                    '${store.levelResult['examPassed'] ? "Passed" : "Not Passed"}',
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 30),
                   ),
                   Spacer(),
@@ -73,13 +114,31 @@ class _ExamPageState extends State<ExamPage> {
               Row(
                 children: [
                   Spacer(),
-                  Expanded(
-                    child: ElevatedButton(onPressed: () {
-                      Modular.to.pop(true);
-                    },child: Text('Ok'),),
+                  Text(
+                    '${(store.levelResult['grade'] as num).toStringAsFixed(2)} %',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontSize: 30, color: Colors.green,fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
-
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Spacer(),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Modular.to.pop(true);
+                      },
+                      child: Text('Ok'),
+                    ),
+                  ),
+                  Spacer(),
                 ],
               )
             ],
@@ -94,8 +153,10 @@ class _ExamPageState extends State<ExamPage> {
     Level level,
   ) {
     return SingleChildScrollView(
+      controller: store.scrollController,
       child: Column(
         children: [
+          SizedBox(height: 10,),
           Text(
             level.title,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.primary),
@@ -134,12 +195,6 @@ class _ExamPageState extends State<ExamPage> {
             children: [
               Row(
                 children: [
-                  Text(question.type == "singleChoice" ? 'Single choice' : 'Multiple choice',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: AppColors.primary)),
-                  Spacer(),
                   Text('${question.mark} Marks',
                       style: Theme.of(context)
                           .textTheme
@@ -150,13 +205,9 @@ class _ExamPageState extends State<ExamPage> {
               SizedBox(
                 height: 20,
               ),
-              Row(
-                children: [
-                  Text(
-                    question.text,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ],
+              Text(
+                question.text,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               SizedBox(height: 10),
               ...question.options
@@ -178,35 +229,41 @@ class _ExamPageState extends State<ExamPage> {
         children: [
           Row(
             children: [
-              InkWell(
-                  onTap: () {
-                    store.selectOption(option, question);
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.transparent,
-                        border: Border.all(color: AppColors.primary),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: option.isCorrect.value
-                                    ? AppColors.primary
-                                    : AppColors.white)),
-                      ))),
+              question.type == 'singleChoice'
+                  ? InkWell(
+                      onTap: () {
+                        store.selectOption(option, question);
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.transparent,
+                            border: Border.all(color: AppColors.primary),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(3),
+                            child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: option.isCorrect.value
+                                        ? AppColors.primary
+                                        : AppColors.white)),
+                          )))
+                  : Checkbox(
+                      value: option.isCorrect.value,
+                      fillColor: MaterialStateProperty.all(AppColors.primary),
+                      onChanged: (s) {
+                        store.selectOption(option, question);
+                      }),
               SizedBox(
                 width: 10,
               ),
-              Text(
-                option.text,
-                style: Theme.of(context).textTheme.titleMedium,
-              )
             ],
+          ),
+          Flexible(
+            child: Text(option.text, style: Theme.of(context).textTheme.titleMedium),
           )
         ],
       );

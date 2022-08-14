@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:roadmap/app/modules/roadmap/roadmap_exam/exam_expired_dialog.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_repo.dart';
 import 'package:roadmap/app/shared/exceptions/app_exception.dart';
 import 'package:roadmap/app/shared/models/exam.dart';
@@ -19,10 +23,30 @@ abstract class ExamStoreBase with Store {
 
   PageController controller = PageController();
 
+  ScrollController scrollController = ScrollController();
+
   late Exam exam;
+  Timer? timer;
 
   ExamStoreBase(this._roadmapRepo, this.exam) {
     getData();
+  }
+
+  Timer initTimer(BuildContext context) {
+    return Timer(exam.exam.expiredAt.toLocal().difference(DateTime.now()), () {
+      showDialog(
+          context: context,
+          useRootNavigator: false,
+          builder: (context) => Dialog(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    child: ExamExpiredPage()),
+              )).then((value) {
+        Modular.to.pop(true);
+      });
+    });
   }
 
   @action
@@ -36,7 +60,7 @@ abstract class ExamStoreBase with Store {
   }
 
   selectOption(Option option, Question question) {
-    if (question.type == 'multiChoice') {
+    if (question.type == 'multipleChoice') {
       runInAction(() {
         option.isCorrect.value = !option.isCorrect.value;
       });
@@ -77,13 +101,22 @@ abstract class ExamStoreBase with Store {
     await Modular.to.pushNamed('/home/profile/scheduler/', arguments: [exam.exam.roadmapId]);
   }
 
-  Map examResult = {};
+  Map levelResult = {};
 
   Future submitLevel(Level level) async {
-    examResult = await _roadmapRepo.submitExamLevel(
+    levelResult = await _roadmapRepo.submitExamLevel(
         exam.exam.roadmapId, exam.exam.id, level.id, level.questions);
+    if (levelResult['examPassed'] != null) {
+      timer?.cancel();
+    }
+
+    if (levelResult['levelPassed'] == false) {
+      Modular.to.pop(false);
+      return;
+    }
     runInAction(() {
       level.isPassed.value = true;
     });
+    scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
   }
 }

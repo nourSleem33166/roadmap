@@ -73,8 +73,6 @@ abstract class ExploreStoreBase with Store {
   @observable
   ExploreType selectedExplore = ExploreType.Roadmaps;
 
-
-
   @action
   void changeSelectedExplore(ExploreType value) {
     selectedExplore = value;
@@ -176,14 +174,16 @@ abstract class ExploreStoreBase with Store {
 
   @action
   Future companiesPagination() async {
-    if ((companiesScrollController.position.pixels ==
-            companiesScrollController.position.maxScrollExtent) &&
-        (companiesPaginationModel.currentPage < companiesPaginationModel.totalPages)) {
-      isCompanyLoading = true;
-      companiesPage += 1;
-      await getCompanies(companiesPage);
-      isCompanyLoading = false;
-    }
+    runInAction(() async {
+      if ((companiesScrollController.position.pixels ==
+              companiesScrollController.position.maxScrollExtent) &&
+          (companiesPaginationModel.currentPage < companiesPaginationModel.totalPages)) {
+        isCompanyLoading = true;
+        companiesPage += 1;
+        await getCompanies(companiesPage);
+        isCompanyLoading = false;
+      }
+    });
   }
 
   @action
@@ -259,7 +259,13 @@ abstract class ExploreStoreBase with Store {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                       Modular.to.pushNamed('/home/roadmapDetails/exam/',
-                                          arguments: [Exam(exam: exam, exceptions: [])]);
+                                          arguments: [
+                                            Exam(exam: exam, exceptions: [])
+                                          ]).then((value) {
+                                        if (value == false) {
+                                          showErrorToast('You Didn\'t pass the exam');
+                                        }
+                                      });
                                     },
                                     child: Text(
                                       'Yes',

@@ -23,23 +23,25 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        body: Observer(builder: (context) {
-          return ComponentTemplate(
-            state: store.pageState,
-            onRetry: () => store.getData(),
-            screen: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                upperSection(context),
-                Expanded(
-                    child: SingleChildScrollView(
-                        child: Column(
-                  children: [_buildAbout(context), _buildRoadmaps(context)],
-                )))
-              ],
-            ),
-          );
-        }),
+        body: Center(
+          child: Observer(builder: (context) {
+            return ComponentTemplate(
+              state: store.pageState,
+              onRetry: () => store.getData(),
+              screen: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  upperSection(context),
+                  Expanded(
+                      child: SingleChildScrollView(
+                          child: Column(
+                    children: [_buildAbout(context), _buildRoadmaps(context)],
+                  )))
+                ],
+              ),
+            );
+          }),
+        ),
       ),
     );
   }
@@ -139,7 +141,9 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
                                           Container(
                                             child: Text(
                                               roadmap.description,
+
                                               style: theme.textTheme.bodyText2!.copyWith(
+                                                overflow: TextOverflow.ellipsis,
                                                   color: AppColors.white.withOpacity(0.8)),
                                             ),
                                           ),
@@ -150,7 +154,7 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
                                                 color: AppColors.white.withOpacity(0.8)),
                                           ),
                                           Text(
-                                            DateFormat('yyyy/MM/dd')
+                                            DateFormat('yyyy/MM/dd','en')
                                                 .format(roadmap.createdAt),
                                             style: theme.textTheme.bodyText2!.copyWith(
                                                 color: AppColors.white.withOpacity(0.8)),

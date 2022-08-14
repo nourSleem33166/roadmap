@@ -11,7 +11,7 @@ void main() async {
   await preInitializations();
   runApp(EasyLocalization(
       child: ModularApp(module: AppModule(), child: AppWidget()),
-      supportedLocales: [Locale("en", ""), Locale("tr", ""), Locale("ar", "")],
+      supportedLocales: [Locale("en", "")],
       fallbackLocale: Locale("en", ""),
       assetLoader: CodegenLoader(),
       path: "translations"));

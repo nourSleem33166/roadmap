@@ -63,7 +63,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                     screen: ReactiveForm(
                       formGroup: store.form,
                       child: ReactiveFormConsumer(
-                        builder: (context,form,child){
+                        builder: (context, form, child) {
                           log("form $form");
                           return Stepper(
                               elevation: 0,
@@ -77,11 +77,11 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                       TextButton(
                                           style: theme.textButtonTheme.style,
                                           onPressed: store.currentStep != 0
-                                              ? (){
-                                            setState(() {
-                                              details.onStepCancel!();
-                                            });
-                                          }
+                                              ? () {
+                                                  setState(() {
+                                                    details.onStepCancel!();
+                                                  });
+                                                }
                                               : null,
                                           child: Text('Back',
                                               style: theme.textTheme.bodyText1!.copyWith(
@@ -92,11 +92,11 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                       Spacer(),
                                       TextButton(
                                           onPressed: store.checkValidation()
-                                              ? (){
-                                            setState(() {
-                                              details.onStepContinue!();
-                                            });
-                                          }
+                                              ? () {
+                                                  setState(() {
+                                                    details.onStepContinue!();
+                                                  });
+                                                }
                                               : null,
                                           child: Text(
                                               store.currentStep != 2 ? 'Continue' : 'Sign Up',
@@ -107,7 +107,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                 );
                               },
                               onStepTapped: (index) => store.changeCurrenStep(index),
-                              onStepCancel: () => store.changeCurrenStep(store.currentStep - 1),
+                              onStepCancel: () =>
+                                  store.changeCurrenStep(store.currentStep - 1),
                               onStepContinue: () {
                                 if (store.currentStep == 2)
                                   store.signUp();
@@ -116,7 +117,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                               },
                               steps: [
                                 Step(
-                                    title: Text('Basic Info', style: theme.textTheme.subtitle1),
+                                    title:
+                                        Text('Basic Info', style: theme.textTheme.subtitle1),
                                     content: Column(
                                       children: [
                                         ReactiveTextField(
@@ -125,7 +127,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                             'required': LocaleKeys.requiredField.tr(),
                                           },
                                           decoration: InputDecoration(
-                                              labelText: 'First Name', alignLabelWithHint: true),
+                                              labelText: 'First Name',
+                                              alignLabelWithHint: true),
                                         ),
                                         SizedBox(
                                           height: 10,
@@ -136,7 +139,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                             'required': LocaleKeys.requiredField.tr(),
                                           },
                                           decoration: InputDecoration(
-                                              labelText: 'Last Name', alignLabelWithHint: true),
+                                              labelText: 'Last Name',
+                                              alignLabelWithHint: true),
                                         ),
                                         SizedBox(
                                           height: 10,
@@ -155,18 +159,20 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                         ),
                                         ReactiveTextField(
                                           formControlName: 'password',
+                                          obscureText: true,
                                           validationMessages: (control) => {
                                             'required': LocaleKeys.requiredField.tr(),
                                           },
                                           decoration: InputDecoration(
-                                              labelText: 'Password', alignLabelWithHint: true),
+                                              labelText: 'Password',
+                                              alignLabelWithHint: true),
                                         ),
                                       ],
                                     ),
                                     isActive: store.currentStep == 0),
                                 Step(
-                                  title:
-                                  Text('Security & Domain', style: theme.textTheme.subtitle1),
+                                  title: Text('Security & Domain',
+                                      style: theme.textTheme.subtitle1),
                                   content: Column(
                                     children: [
                                       Text(
@@ -180,29 +186,31 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                       Wrap(
                                           children: store.workDomains
                                               .map((domain) => InkWell(
-                                            child: ReactiveFormConsumer(
-                                                builder: (context, form, child) {
-                                                  return Chip(
-                                                      backgroundColor:
-                                                      form.control('workDomain').value ==
-                                                          domain
-                                                          ? AppColors.primary
-                                                          : null,
-                                                      label: Text(domain.text,
-                                                          style: theme.textTheme.bodyText2!
-                                                              .copyWith(
-                                                              color: form
-                                                                  .control(
-                                                                  'workDomain')
-                                                                  .value ==
+                                                    child: ReactiveFormConsumer(
+                                                        builder: (context, form, child) {
+                                                      return Chip(
+                                                          backgroundColor: form
+                                                                      .control('workDomain')
+                                                                      .value ==
                                                                   domain
-                                                                  ? AppColors.white
-                                                                  : null)));
-                                                }),
-                                            onTap: () {
-                                              store.setWorkDomain(domain);
-                                            },
-                                          ))
+                                                              ? AppColors.primary
+                                                              : null,
+                                                          label: Text(domain.text,
+                                                              style: theme
+                                                                  .textTheme.bodyText2!
+                                                                  .copyWith(
+                                                                      color: form
+                                                                                  .control(
+                                                                                      'workDomain')
+                                                                                  .value ==
+                                                                              domain
+                                                                          ? AppColors.white
+                                                                          : null)));
+                                                    }),
+                                                    onTap: () {
+                                                      store.setWorkDomain(domain);
+                                                    },
+                                                  ))
                                               .toList(),
                                           spacing: 5),
                                       SizedBox(
@@ -247,7 +255,6 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                                 )
                               ]);
                         },
-
                       ),
                     ),
                   );
@@ -278,7 +285,12 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
             ),
             InkWell(
               onTap: () {
-                store.getCoverFile();
+                store.getCoverFile().then((value) {
+                  setState(() {
+                    log("image is ${store.coverImage?.path}");
+                  });
+                });
+
               },
               child: Container(
                 height: 150,
@@ -296,18 +308,25 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
         ),
         InkWell(
           onTap: () {
-            store.getProfileFile();
+            store.getProfileFile().then((value) {
+              setState(() {
+                log("image is ${store.profileImage?.path}");
+
+              });
+            });
           },
           child: Container(
             width: 90,
             height: 90,
             decoration: BoxDecoration(
+                shape: BoxShape.circle,
                 image: DecorationImage(
+                    fit: BoxFit.cover,
                     image: store.profileImage == null
                         ? Image.asset(Assets.assetsProfile).image
                         : Image.file(
                             store.profileImage!,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.fill,
                           ).image)),
           ),
         ),

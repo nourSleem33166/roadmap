@@ -28,8 +28,8 @@ abstract class RoadmapGraphStoreBase with Store {
   RoadmapModel? roadmap;
   List<RoadmapNode> nodes = [];
 
-  final Graph graph = Graph()..isTree = true;
-  SugiyamaConfiguration builder = SugiyamaConfiguration();
+   Graph graph = Graph()..isTree = true;
+  BuchheimWalkerConfiguration builder = BuchheimWalkerConfiguration();
 
   @observable
   ComponentState pageState = ComponentState.FETCHING_DATA;
@@ -42,9 +42,8 @@ abstract class RoadmapGraphStoreBase with Store {
     this.isLearningMode = isLearningMode;
     this.roadmapId = roadmapId;
     builder
-      ..levelSeparation = (70)
-      ..orientation = (SugiyamaConfiguration.ORIENTATION_LEFT_RIGHT)
-      ..nodeSeparation = 70;
+      ..levelSeparation = (75)
+      ..orientation = (BuchheimWalkerConfiguration.ORIENTATION_LEFT_RIGHT);
     getData();
   }
 
@@ -56,6 +55,7 @@ abstract class RoadmapGraphStoreBase with Store {
       nodes = isLearningMode
           ? await _roadmapRepo.getLearningNodes(roadmapId)
           : await _roadmapRepo.getRoadmapNodes(roadmapId);
+      // nodes.removeWhere((element) => element.label=='Props vs State' || element.label=='Component Life Cycle');
       mapNodes();
       pageState = ComponentState.SHOW_DATA;
     } on AppException catch (e) {
@@ -82,6 +82,8 @@ abstract class RoadmapGraphStoreBase with Store {
   }
 
   Future mapNodes() async {
+    graph.nodes.clear();
+    graph.edges.clear();
     for (final node in nodes) graph.addNode(Node.Id(node.id));
     for (final node in nodes)
       for (final parent in node.parents) graph.addEdge(Node.Id(parent), Node.Id(node.id));
@@ -145,12 +147,11 @@ abstract class RoadmapGraphStoreBase with Store {
                 (passedExam) {
               if (passedExam != null) {
                 if (passedExam as bool) {
-                  getData();
                 } else {
                   showErrorToast('Exam Not Passed');
-                  getData();
                 }
               }
+              getData();
             });
           }
         });

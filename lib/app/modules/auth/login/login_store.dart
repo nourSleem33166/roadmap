@@ -25,7 +25,7 @@ abstract class LoginStoreBase with Store {
 
   final form = FormGroup({
     'email': FormControl<String>(
-        value: 'nour.sleem.learner@gmail.com',
+        value: 'learner@hamza.com',
         validators: [Validators.required, Validators.email]),
     'password':
         FormControl<String>(value: '123', validators: [Validators.required]),

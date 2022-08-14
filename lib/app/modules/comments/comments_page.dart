@@ -142,8 +142,7 @@ class _CommentsPageState extends State<CommentsPage> {
   }
 
   Widget commentItem(Comment comment) {
-    comment.learner.personalImage =
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwclg60fm6EHOyIjBqSqdxAD7i1yNPPGeOJQ&usqp=CAU';
+
     return InkWell(
       onLongPress: comment.learnerId == store.user!.id
           ? () {

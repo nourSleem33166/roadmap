@@ -68,6 +68,7 @@ abstract class CompanyStoreBase with Store {
   Future addCompanyToFavs() async {
     runInAction(() {
       company!.isFavorite!.value = true;
+      company!.isFollowed!.value = true;
     });
     final res = await _followProcessRepo.addCompanyToFavs(company!.id);
     if (!res) {

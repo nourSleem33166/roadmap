@@ -6,6 +6,7 @@ class Assets {
   static const String assetsBackground = 'assets/background.png';
   static const String assetsCoverImage = 'assets/cover_image.png';
   static const String assetsHaha = 'assets/haha.gif';
+  static const String assetsIcon = 'assets/icon.png';
   static const String assetsLeaf = 'assets/leaf.png';
   static const String assetsLike = 'assets/like.gif';
   static const String assetsLogo1024x1024 = 'assets/logo_1024x1024.png';

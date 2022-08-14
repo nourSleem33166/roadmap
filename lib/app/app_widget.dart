@@ -28,13 +28,7 @@ class AppWidget extends StatelessWidget {
               if (savedTheme != null) {
                 controller.setTheme(savedTheme);
               } else {
-                Brightness platformBrightness =
-                    SchedulerBinding.instance.window.platformBrightness;
-                if (platformBrightness == Brightness.dark)
-                  controller.setTheme(CustomAppTheme.instance.darkThemeID);
-                else
                   controller.setTheme(CustomAppTheme.instance.lightThemeID);
-                controller.forgetSavedTheme();
               }
             },
             child: ThemeConsumer(

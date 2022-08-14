@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:roadmap/app/modules/profile/favorite_companies/favorite_companies_store.dart';
-import 'package:roadmap/app/modules/profile/followed_companies/followed_companies_store.dart';
 import 'package:roadmap/app/shared/widgets/component_template.dart';
 
 import '../../../shared/models/company.dart';
@@ -22,25 +21,29 @@ class _FavoriteCompaniesPageState extends State<FavoriteCompaniesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Favorite Companies')),
-      body: Observer(builder: (context) {
-        return ComponentTemplate(
-          state: store.pageState,
-          screen: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(children: [
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: store.favoriteCompanies.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: companyItem(context, store.favoriteCompanies[index]),
-                        );
-                      }))
-            ]),
-          ),
-        );
-      }),
+      body: Center(
+        child: Observer(builder: (context) {
+          return ComponentTemplate(
+            state: store.pageState,
+            screen: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(children: [
+                Expanded(
+                    child: store.favoriteCompanies.isEmpty
+                        ? Center(child: Text('No Favorite Companies'),)
+                        : ListView.builder(
+                            itemCount: store.favoriteCompanies.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: companyItem(context, store.favoriteCompanies[index]),
+                              );
+                            }))
+              ]),
+            ),
+          );
+        }),
+      ),
     );
   }
 

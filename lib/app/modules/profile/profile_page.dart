@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -44,22 +45,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       width: 10,
                     ),
                     Text('Who Am I',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(color: AppColors.primary,)),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              color: AppColors.primary,
+                            )),
                   ],
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Row(
+                Column( crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: 10,
+
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(store.user?.bio ?? "",
+                          style: Theme.of(context).textTheme.bodyMedium),
                     ),
-                    Text('dsfgldsf;dsfdsfkdsfkdsfdsf;kds;fsd;f',
-                        style: Theme.of(context).textTheme.bodyMedium),
                   ],
                 ),
                 SizedBox(
@@ -80,7 +81,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 tile(context, () {
                   store.logout();
                 }, 'Logout'),
-
               ],
             ),
           );
@@ -90,10 +90,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget userHeader(BuildContext context, User user) {
-    user.coverImage =
-        "http://c.files.bbci.co.uk/136D7/production/_121257597_mediaitem121257596.jpg";
-    user.personalImage =
-        "https://yt3.ggpht.com/AAnXC4o1n8BKDsO5l6Uc71rf7WOJjm2-aUHzkvyp9vGYB5F4UtXWTecVzvPOBCFK0bNYsZlD7Hk=s900-c-k-c0x00ffffff-no-rj";
+    log("user image is ${user.coverImage}");
+    log("user image is ${user.personalImage}");
+
+
     final theme = Theme.of(context);
     return Card(
       elevation: 5,
@@ -157,7 +157,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget tile(BuildContext context, void Function() function, String label) {
-    return Card(elevation: 5,
+    return Card(
+      elevation: 5,
       child: Container(
           height: 60,
           child: Center(

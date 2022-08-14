@@ -17,7 +17,7 @@ class NotificationService {
   Future<void> init() async {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('app_icon');
     final MacOSInitializationSettings initializationSettingsMacOS =
         MacOSInitializationSettings();
     final InitializationSettings initializationSettings = InitializationSettings(
@@ -63,6 +63,7 @@ class NotificationService {
           dateToSchedule,
           NotificationDetails(
               android: AndroidNotificationDetails('1', '2',
+
                   priority: Priority.high, importance: Importance.max, playSound: true)),
           androidAllowWhileIdle: true,
           matchDateTimeComponents: DateTimeComponents.time,

@@ -42,86 +42,98 @@ class _RepliesPageState extends State<RepliesPage> {
           screen: Column(children: [
             commentsHeader(context),
             Expanded(child: buildComments()),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black12,
-              ),
-              width: double.infinity,
-              child: ReactiveForm(
-                formGroup: store.form,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 10,
-                    ),
-                    CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(store.user?.personalImage ?? ""),
-                      radius: 22,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        child: Column(
-                      children: [
-                        ReactiveTextField(
-                            showErrors: (control) => false,
-                            formControlName: 'comment',
-                            decoration: InputDecoration()),
-                        if (store.file != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.file(
-                                store.file!,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                width: 100,
-                              ),
-                            ),
-                          )
-                      ],
-                    )),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Builder(builder: (context) {
-                      final form = ReactiveForm.of(context);
-
-                      return Row(
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black12),
+                  borderRadius: BorderRadius.circular(15)
+                ),
+                width: double.infinity,
+                child: ReactiveForm(
+                  formGroup: store.form,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(store.user?.personalImage ?? ""),
+                        radius: 22,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                          child: Column(
                         children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                store.pickImage();
-                              },
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: AppColors.white,
-                                size: 20,
-                              )),
-                          SizedBox(
-                            width: 5,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ReactiveTextField(
+
+                                showErrors: (control) => false,
+                                formControlName: 'comment',
+                                decoration: InputDecoration.collapsed(
+hintText: 'Comment'
+
+
+                                )),
                           ),
-                          ElevatedButton(
-                              onPressed: form!.valid
-                                  ? () {
-                                      store.sendComment();
-                                    }
-                                  : null,
-                              child: Icon(
-                                Icons.send,
-                                color: AppColors.white,
-                                size: 20,
-                              )),
+                          if (store.file != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Image.file(
+                                  store.file!,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                  width: 100,
+                                ),
+                              ),
+                            )
                         ],
-                      );
-                    }),
-                    SizedBox(
-                      width: 10,
-                    ),
-                  ],
+                      )),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Builder(builder: (context) {
+                        final form = ReactiveForm.of(context);
+
+                        return Row(
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  store.pickImage();
+                                },
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: AppColors.white,
+                                  size: 20,
+                                )),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            ElevatedButton(
+                                onPressed: form!.valid
+                                    ? () {
+                                        store.sendComment();
+                                      }
+                                    : null,
+                                child: Icon(
+                                  Icons.send,
+                                  color: AppColors.white,
+                                  size: 20,
+                                )),
+                          ],
+                        );
+                      }),
+                      SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )
@@ -155,8 +167,7 @@ class _RepliesPageState extends State<RepliesPage> {
   }
 
   Widget commentItem(Comment comment) {
-    comment.learner.personalImage =
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwclg60fm6EHOyIjBqSqdxAD7i1yNPPGeOJQ&usqp=CAU';
+
     return Column(
       children: [
         Row(
