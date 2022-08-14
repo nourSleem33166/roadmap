@@ -20,6 +20,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../../generated/assets.dart';
 import '../../shared/theme/app_colors.dart';
+import '../../shared/toasts/messages_toasts.dart';
+import '../../shared/toasts/shared_report_dialog.dart';
 
 part 'comments_store.g.dart';
 
@@ -160,7 +162,6 @@ abstract class CommentsStoreBase with Store {
         commentsPagingController.itemList?[oldCommentIndex] = editedComment;
         commentsPagingController.itemList?[oldCommentIndex].attachment = "nowLoading";
         commentsPagingController.notifyListeners();
-
       }
     });
   }
@@ -170,6 +171,79 @@ abstract class CommentsStoreBase with Store {
       if (value) {
         commentsPagingController.itemList!.remove(comment);
         commentsPagingController.notifyListeners();
+      }
+    });
+  }
+
+  Future showReportOptionsDialog(BuildContext context, Comment comment) async {
+    showDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) => Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: Scaffold(
+                    body: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Icon(
+                          Icons.notifications,
+                          color: AppColors.primary,
+                          size: 50,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text('What do you want to do?'),
+                        Spacer(),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(1);
+                                  },
+                                  child: Text(
+                                    'Report Comment',
+                                    style: Theme.of(context).textTheme.bodyLarge,
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(2);
+                                  },
+                                  child: Text(
+                                    'Report User',
+                                    style: Theme.of(context).textTheme.bodyLarge,
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                          ],
+                        )
+                      ]),
+                    ),
+                  )),
+            )).then((value) {
+      if (value != null) {
+        if (value == 1) {
+          reportComment(context, comment);
+        } else if (value == 2) {
+          reportLearner(context, comment);
+        }
       }
     });
   }
@@ -239,6 +313,52 @@ abstract class CommentsStoreBase with Store {
                     ),
                   )),
             ));
+  }
+
+  Future reportLearner(BuildContext context, Comment comment) async {
+    showDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: SumbitMessageDialog()),
+          );
+        }).then((value) {
+      if (value != null) {
+        _commentsRepo.reportUser(comment.learnerId, value.toString()).then((value) {
+          if (value) {
+            showSuccessToast('Your Report has been sent');
+          }
+        });
+      }
+    });
+  }
+
+  Future reportComment(BuildContext context, Comment comment) async {
+    showDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: SumbitMessageDialog()),
+          );
+        }).then((value) {
+      if (value != null) {
+        _commentsRepo.reportComment(comment.id, value.toString()).then((value) {
+          if (value) {
+            showSuccessToast('Your Report has been sent');
+          }
+        });
+      }
+    });
   }
 
   final reactionsList = [

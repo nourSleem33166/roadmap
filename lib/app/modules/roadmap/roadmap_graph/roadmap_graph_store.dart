@@ -43,8 +43,8 @@ abstract class RoadmapGraphStoreBase with Store {
     this.roadmapId = roadmapId;
     builder
       ..levelSeparation = (70)
-      ..orientation = (SugiyamaConfiguration.ORIENTATION_TOP_BOTTOM)
-      ..nodeSeparation = 50;
+      ..orientation = (SugiyamaConfiguration.ORIENTATION_LEFT_RIGHT)
+      ..nodeSeparation = 70;
     getData();
   }
 
@@ -129,7 +129,10 @@ abstract class RoadmapGraphStoreBase with Store {
                   width: MediaQuery.of(context).size.width / 2,
                   height: MediaQuery.of(context).size.height * 0.8,
                   child: OptionalNodesPage(nodes
-                      .where((element) => element.id != node.id && element.type != 'roadmap')
+                      .where((element) =>
+                          element.id != node.id &&
+                          element.type != 'roadmap' &&
+                          element.isPassed != true)
                       .toList())),
             )).then((value) {
       if (value != null) {
@@ -155,8 +158,5 @@ abstract class RoadmapGraphStoreBase with Store {
     });
   }
 
-  void downloadCertificate(){
-
-  }
-
+  void downloadCertificate() {}
 }

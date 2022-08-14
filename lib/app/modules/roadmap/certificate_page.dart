@@ -44,8 +44,10 @@ class _CertificatePageState extends State<CertificatePage> {
           ),
         ],
       ),
-      body: PDFView(
-        filePath: widget.file.path,
+      body: InteractiveViewer(
+        child: PDFView(
+          filePath: widget.file.path,
+        ),
       ),
     );
   }

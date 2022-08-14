@@ -6,33 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:roadmap/app/modules/scheduler/scheduler_store.dart';
-import 'package:roadmap/app/shared/models/scheduler_model.dart';
 import 'package:roadmap/app/shared/theme/app_colors.dart';
 import 'package:roadmap/app/shared/widgets/component_template.dart';
 
 class SchedulerPage extends StatefulWidget {
-  final LearnWeek learnWeek = LearnWeek(
-      sat: WeekDay(isHoliday: false, dates: [
-        SchedulerDate(startAt: '12:30', endAt: '14:30', referenceId: 'someId'),
-        SchedulerDate(startAt: '15:30', endAt: '16:30', referenceId: 'someId')
-      ]),
-      sun: WeekDay(isHoliday: true, dates: [
-        SchedulerDate(startAt: '12:30', endAt: '14:30', referenceId: 'someId'),
-        SchedulerDate(startAt: '15:30', endAt: '16:30', referenceId: 'someId')
-      ]),
-      mon: WeekDay(isHoliday: true, dates: []),
-      tue: WeekDay(isHoliday: true, dates: []),
-      wed: WeekDay(isHoliday: true, dates: []),
-      thu: WeekDay(isHoliday: true, dates: []),
-      fri: WeekDay(isHoliday: true, dates: []));
-
   @override
   _SchedulerPageState createState() => _SchedulerPageState();
 }
 
 class _SchedulerPageState extends State<SchedulerPage> {
   final store = Modular.get<SchedulerStore>();
-
 
   @override
   void initState() {
@@ -48,9 +31,12 @@ class _SchedulerPageState extends State<SchedulerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: AppColors.primary,
-          child: Text('Submit'),
+        floatingActionButton: ElevatedButton(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Submit',
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white)),
+          ),
           onPressed: () {
             store.updateScheduler(context);
           },
@@ -97,7 +83,7 @@ class _SchedulerPageState extends State<SchedulerPage> {
                                 width: rect.width,
                                 height: rect.height,
                                 child: Card(
-                                    color: AppColors.primary,
+                                    color: e.color,
                                     child: Center(
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),

@@ -42,6 +42,16 @@ abstract class SchedulerStoreBase with Store {
 
   List<Roadmap> userRoadmaps = [];
 
+  List<Color> colors = [
+    Colors.deepOrange,
+    Colors.blueAccent,
+    Colors.redAccent,
+    AppColors.primary,
+    Colors.purple
+  ];
+
+  Map<String, dynamic> info = {};
+
   @action
   Future initValues(BuildContext context, EventController eventController) async {
     try {
@@ -55,6 +65,11 @@ abstract class SchedulerStoreBase with Store {
       userRoadmaps = schedulerModel!.roadmaps ?? [];
       if (roadmap != null) {
         userRoadmaps.add(Roadmap(id: roadmap!.id, name: roadmap!.title));
+      }
+      for (int i = 0; i < userRoadmaps.length; i++) {
+        if (info[userRoadmaps[i].id] == null) {
+          info[userRoadmaps[i].id] = {'name': userRoadmaps[i].name, 'color': colors[i % 5]};
+        }
       }
       initData(context);
       componentState = ComponentState.SHOW_DATA;
@@ -70,9 +85,10 @@ abstract class SchedulerStoreBase with Store {
       final nextDay = DateTime.now().mostRecentWeekday(DateTime.now(), weekday);
       controller.add(CalendarEventData(
         event: element.referenceId,
+        color: info[element.referenceId]['color'],
         endDate: DateTime(nextDay.year, nextDay.month, nextDay.day, endHour, endMinute),
         date: DateTime(nextDay.year, nextDay.month, nextDay.day, startHour, startMinute),
-        title: userRoadmaps.singleWhere((roadmap) => roadmap.id == element.referenceId!).name,
+        title: info[element.referenceId]['name'],
         endTime: DateTime(nextDay.year, nextDay.month, nextDay.day, endHour, endMinute),
         startTime: DateTime(nextDay.year, nextDay.month, nextDay.day, startHour, startMinute),
       ));
@@ -139,8 +155,8 @@ abstract class SchedulerStoreBase with Store {
     log("learn week is ${learnWeekToSend}");
 
     await _schedulerRepo.updateScheduler(learnWeekToSend);
-    NotificationService.instance.scheduleNotifications(learnWeek!);
-    Modular.to.pop(true);
+    NotificationService.instance.scheduleNotifications(learnWeekToSend, userRoadmaps);
+    if (Modular.to.canPop()) Modular.to.pop(true);
     closeLoading();
   }
 

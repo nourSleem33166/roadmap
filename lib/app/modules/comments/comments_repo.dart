@@ -7,6 +7,7 @@ import 'package:roadmap/app/shared/models/pagination_model.dart';
 import 'package:roadmap/app/shared/services/storage_service.dart';
 
 import '../../shared/exceptions/app_exception.dart';
+import '../../shared/exceptions/app_exception_handler.dart';
 
 class CommentsRepo {
   String _route;
@@ -113,5 +114,26 @@ class CommentsRepo {
       return interactionsFromJson(result.data);
     else
       return [];
+  }
+
+  Future<bool> reportComment(String id, String message) async {
+    try {
+      final result = await _dio.post("/reports/comment",
+          data: {'message': message}, queryParameters: {'reportOn': id});
+      if (result.statusCode == 201) return true;
+      return false;
+    } catch (e) {
+      throw AppExceptionHandler.instance.handleError(e);
+    }
+  }
+  Future<bool> reportUser(String id, String message) async {
+    try {
+      final result = await _dio.post("/reports/comment",
+          data: {'message': message}, queryParameters: {'reportOn': id});
+      if (result.statusCode == 201) return true;
+      return false;
+    } catch (e) {
+      throw AppExceptionHandler.instance.handleError(e);
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:roadmap/app/modules/company/company_repo.dart';
@@ -7,6 +9,8 @@ import 'package:roadmap/app/shared/models/department.dart';
 import 'package:roadmap/app/shared/repos/follow_process_repo.dart';
 import 'package:roadmap/app/shared/toasts/messages_toasts.dart';
 import 'package:roadmap/app/shared/widgets/component_template.dart';
+
+import '../../shared/toasts/shared_report_dialog.dart';
 
 part 'company_store.g.dart';
 
@@ -97,5 +101,28 @@ abstract class CompanyStoreBase with Store {
       pageState = ComponentState.ERROR;
       showErrorToast(e.message);
     }
+  }
+
+  Future reportCompany(BuildContext context, String companyId) async {
+    showDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: SumbitMessageDialog()),
+          );
+        }).then((value) {
+      if (value != null) {
+        _companyRepo.reportCompany(companyId, value.toString()).then((value) {
+          if (value) {
+            showSuccessToast('Your Report has been sent');
+          }
+        });
+      }
+    });
   }
 }

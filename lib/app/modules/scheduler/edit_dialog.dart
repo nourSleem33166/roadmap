@@ -48,7 +48,7 @@ class _EditDatePageState extends State<EditDatePage> {
                           readOnly: true,
                           formControlName: 'startTime',
                           decoration: InputDecoration(
-                              labelText: 'Start Time',
+                              labelText: 'Time',
                               suffixIcon: IconButton(
                                   icon: const Icon(Icons.access_time),
                                   onPressed: () {

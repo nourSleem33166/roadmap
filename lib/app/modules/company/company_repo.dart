@@ -14,8 +14,7 @@ class CompanyRepo {
 
   Future<CompanyModel?> getCompanyById(String id) async {
     try {
-      final result =
-          await _dio.get("explore/companies/$id", queryParameters: {'id': id});
+      final result = await _dio.get("explore/companies/$id", queryParameters: {'id': id});
       return CompanyModel.fromJson(result.data);
     } catch (e) {
       throw AppExceptionHandler.instance.handleError(e);
@@ -24,8 +23,8 @@ class CompanyRepo {
 
   Future<List<Department>?> getCompanyDepts(String id) async {
     try {
-      final result = await _dio
-          .get("explore/companies/$id/depts", queryParameters: {'id': id});
+      final result =
+          await _dio.get("explore/companies/$id/depts", queryParameters: {'id': id});
       return deptsFromJson(json.encode(result.data));
     } catch (e) {
       throw AppExceptionHandler.instance.handleError(e);
@@ -42,13 +41,22 @@ class CompanyRepo {
     }
   }
 
-  Future<List<RoadmapModel>> getDeptRoadmaps(
-      String id, String comapnyId) async {
+  Future<List<RoadmapModel>> getDeptRoadmaps(String id, String comapnyId) async {
     try {
-      final result = await _dio.get(
-          "explore/companies/$comapnyId/depts/$id/roadmaps",
+      final result = await _dio.get("explore/companies/$comapnyId/depts/$id/roadmaps",
           queryParameters: {'deptId': id});
       return roadmapsModelFromJson(jsonEncode(result.data));
+    } catch (e) {
+      throw AppExceptionHandler.instance.handleError(e);
+    }
+  }
+
+  Future<bool> reportCompany(String id, String message) async {
+    try {
+      final result = await _dio.post("/reports/company",
+          data: {'message': message}, queryParameters: {'reportOn': id});
+      if (result.statusCode == 201) return true;
+      return false;
     } catch (e) {
       throw AppExceptionHandler.instance.handleError(e);
     }

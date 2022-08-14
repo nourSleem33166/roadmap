@@ -87,8 +87,7 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
             height: 30,
           ),
           SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
+            child: Wrap(
               children: store.roadmaps!
                   .map((roadmap) => Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -102,8 +101,8 @@ class _DeptPageState extends ModularState<DeptPage, DeptStore> {
                             ),
                             elevation: 5,
                             child: Container(
-                                width: (MediaQuery.of(context).size.width / 2) - 30,
-                                height: 250,
+                                width: 150,
+                                height: 200,
                                 child: Stack(
                                   children: [
                                     Container(

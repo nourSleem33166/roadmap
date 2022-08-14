@@ -1,54 +1,40 @@
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:roadmap/app/shared/models/pagination_model.dart';
-import 'package:roadmap/app/shared/models/roadmap.dart';
 
 import '../../shared/exceptions/app_exception_handler.dart';
 import '../../shared/models/company.dart';
+import '../../shared/models/department.dart';
 
 class ProfileRepo {
   Dio _dio;
 
   ProfileRepo(this._dio);
 
-  Future<PaginationModel<RoadmapModel>> getRoadmaps(int page, int pageSize) async {
-    final result = await _dio
-        .get("explore/roadmaps", queryParameters: {'page': page, 'pageSize': pageSize});
-
-    return PaginationModel.fromJson(result.data, roadmapsModelFromJson);
-  }
-
-  Future<PaginationModel<RoadmapModel>> searchRoamaps(
-      String? text, int page, int pageSize) async {
+  Future<List<CompanyModel>> getFollowedCompanies() async {
     try {
-      log("text is $text");
-      final result = await _dio.get("learner/search/roadmaps",
-          queryParameters: {'page': page, 'pageSize': pageSize, 'text': text});
-      return PaginationModel.fromJson(result.data, roadmapsModelFromJson);
+      final result = await _dio.get("learner/profile/followedCompanies");
+      return companiesModelFromJson(jsonEncode(result.data));
     } catch (e) {
       throw AppExceptionHandler.instance.handleError(e);
     }
   }
 
-  Future<PaginationModel<CompanyModel>> getCompanies(int page, int pageSize) async {
+  Future<List<CompanyModel>> getFavoriteCompanies() async {
+    try {
+      final result = await _dio.get("learner/profile/favouriteCompanies");
+      return companiesModelFromJson(jsonEncode(result.data));
+    } catch (e) {
+      throw AppExceptionHandler.instance.handleError(e);
+    }
+  }
+
+  Future<List<Department>> getFollowedDepts(String companyId) async {
     try {
       final result = await _dio
-          .get("explore/companies", queryParameters: {'page': page, 'pageSize': pageSize});
-      return PaginationModel.fromJson(result.data, companiesModelFromJson);
+          .get("/learner/profile/followedDepts", queryParameters: {'companyId': companyId});
+      return deptsFromJson(jsonEncode(result.data));
     } catch (e) {
-      throw AppExceptionHandler.instance.handleError(e);
-    }
-  }
-
-  Future<PaginationModel<CompanyModel>> searchCompaines(
-      String? text, int page, int pageSize) async {
-    try {
-      final result = await _dio.get("learner/search/companies",
-          queryParameters: {'page': page, 'pageSize': pageSize, 'text': text});
-      return PaginationModel.fromJson(result.data, companiesModelFromJson);
-    } catch (e) {
-      print("error is ${e.toString()}");
       throw AppExceptionHandler.instance.handleError(e);
     }
   }

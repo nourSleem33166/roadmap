@@ -74,7 +74,7 @@ abstract class ExamStoreBase with Store {
   }
 
   Future navigateToScheduler() async {
-    await Modular.to.pushNamed('/home/scheduler/', arguments: [exam.exam.roadmapId]);
+    await Modular.to.pushNamed('/home/profile/scheduler/', arguments: [exam.exam.roadmapId]);
   }
 
   Map examResult = {};

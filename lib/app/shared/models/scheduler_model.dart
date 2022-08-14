@@ -3,6 +3,7 @@
 //     final interaction = interactionFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:calendar_view/calendar_view.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -121,8 +122,10 @@ class SchedulerDate {
         referenceId: data.event?.toString() ?? "");
   }
 
-  factory SchedulerDate.fromJson(Map<String, dynamic> json) => SchedulerDate(
-      endAt: json['endAt'], startAt: json['startAt'], referenceId: json['referenceId']);
+  factory SchedulerDate.fromJson(Map<String, dynamic> json) {
+   return SchedulerDate(
+       endAt: json['endAt'], startAt: json['startAt'], referenceId: json['referenceId']);
+  }
 
   Map<String, dynamic> toJson() =>
       {'endAt': endAt, 'startAt': startAt, 'referenceId': referenceId};

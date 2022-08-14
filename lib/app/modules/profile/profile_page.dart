@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(color: AppColors.primary)),
+                            .copyWith(color: AppColors.primary,)),
                   ],
                 ),
                 SizedBox(
@@ -67,7 +67,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 tile(context, () {
                   store.goToScheduler();
-                }, 'My Scheduler')
+                }, 'My Scheduler'),
+                SizedBox(height: 20),
+                tile(context, () {
+                  store.goToFollowedCompanies();
+                }, 'Followed Companies'),
+                SizedBox(height: 20),
+                tile(context, () {
+                  store.goToFavoriteCompanies();
+                }, 'Favorite Companies'),
+                SizedBox(height: 20),
+                tile(context, () {
+                  store.logout();
+                }, 'Logout'),
+
               ],
             ),
           );
@@ -144,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget tile(BuildContext context, void Function() function, String label) {
-    return Card(
+    return Card(elevation: 5,
       child: Container(
           height: 60,
           child: Center(

@@ -14,7 +14,7 @@ class ExploreRepo {
 
   Future<PaginationModel<RoadmapModel>> getRoadmaps(int page, int pageSize) async {
     final result = await _dio
-        .get("explore/roadmaps", queryParameters: {'page': page, 'pageSize': pageSize});
+        .get("explore/roadmaps", queryParameters: {'page': page, 'pageSize': 3});
 
     return PaginationModel.fromJson(result.data, roadmapsModelFromJson);
   }
@@ -24,7 +24,7 @@ class ExploreRepo {
     try {
       log("text is $text");
       final result = await _dio.get("learner/search/roadmaps",
-          queryParameters: {'page': page, 'pageSize': pageSize, 'text': text});
+          queryParameters: {'page': page, 'pageSize': 3, 'text': text});
       return PaginationModel.fromJson(result.data, roadmapsModelFromJson);
     } catch (e) {
       throw AppExceptionHandler.instance.handleError(e);
@@ -34,7 +34,7 @@ class ExploreRepo {
   Future<PaginationModel<CompanyModel>> getCompanies(int page, int pageSize) async {
     try {
       final result = await _dio
-          .get("explore/companies", queryParameters: {'page': page, 'pageSize': pageSize});
+          .get("explore/companies", queryParameters: {'page': page, 'pageSize': 3});
       return PaginationModel.fromJson(result.data, companiesModelFromJson);
     } catch (e) {
       throw AppExceptionHandler.instance.handleError(e);
@@ -45,7 +45,7 @@ class ExploreRepo {
       String? text, int page, int pageSize) async {
     try {
       final result = await _dio.get("learner/search/companies",
-          queryParameters: {'page': page, 'pageSize': pageSize, 'text': text});
+          queryParameters: {'page': page, 'pageSize': 3, 'text': text});
       return PaginationModel.fromJson(result.data, companiesModelFromJson);
     } catch (e) {
       print("error is ${e.toString()}");

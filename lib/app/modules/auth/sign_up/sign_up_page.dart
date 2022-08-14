@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -60,198 +62,256 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpStore> {
                     state: store.signUpState,
                     screen: ReactiveForm(
                       formGroup: store.form,
-                      child: Stepper(
-                          elevation: 0,
-                          currentStep: store.currentStep,
-                          type: StepperType.horizontal,
-                          controlsBuilder: (context, details) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: Row(
-                                children: [
-                                  TextButton(
-                                      style: theme.textButtonTheme.style,
-                                      onPressed: store.currentStep != 0
-                                          ? details.onStepCancel
-                                          : null,
-                                      child: Text('Back',
-                                          style: theme.textTheme.bodyText1!
-                                              .copyWith(
+                      child: ReactiveFormConsumer(
+                        builder: (context,form,child){
+                          log("form $form");
+                          return Stepper(
+                              elevation: 0,
+                              currentStep: store.currentStep,
+                              type: StepperType.vertical,
+                              controlsBuilder: (context, details) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: Row(
+                                    children: [
+                                      TextButton(
+                                          style: theme.textButtonTheme.style,
+                                          onPressed: store.currentStep != 0
+                                              ? (){
+                                            setState(() {
+                                              details.onStepCancel!();
+                                            });
+                                          }
+                                              : null,
+                                          child: Text('Back',
+                                              style: theme.textTheme.bodyText1!.copyWith(
                                                   color: store.currentStep != 0
                                                       ? AppColors.primary
                                                       : Colors.grey,
                                                   fontSize: 15))),
-                                  Spacer(),
-                                  TextButton(
-                                      onPressed: details.onStepContinue,
-                                      child: Text(
-                                          store.currentStep != 1
-                                              ? 'Continue'
-                                              : 'Sign Up',
-                                          style: theme.textTheme.bodyText1!
-                                              .copyWith(
-                                                  color: AppColors.primary,
-                                                  fontSize: 15)))
-                                ],
-                              ),
-                            );
-                          },
-                          onStepTapped: (index) =>
-                              store.changeCurrenStep(index),
-                          onStepCancel: () =>
-                              store.changeCurrenStep(store.currentStep - 1),
-                          onStepContinue: () {
-                            if (store.currentStep == 1)
-                              store.signUp();
-                            else
-                              store.changeCurrenStep(store.currentStep + 1);
-                          },
-                          steps: [
-                            Step(
-                                title: Text('Basic Info',
-                                    style: theme.textTheme.subtitle1),
-                                content: Column(
-                                  children: [
-                                    ReactiveTextField(
-                                      formControlName: 'firstName',
-                                      validationMessages: (control) => {
-                                        'required':
-                                            LocaleKeys.requiredField.tr(),
-                                      },
-                                      decoration: InputDecoration(
-                                          labelText: 'First Name',
-                                          alignLabelWithHint: true),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    ReactiveTextField(
-                                      formControlName: 'lastName',
-                                      validationMessages: (control) => {
-                                        'required':
-                                            LocaleKeys.requiredField.tr(),
-                                      },
-                                      decoration: InputDecoration(
-                                          labelText: 'Last Name',
-                                          alignLabelWithHint: true),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    ReactiveTextField(
-                                      formControlName: 'email',
-                                      validationMessages: (control) => {
-                                        'required':
-                                            LocaleKeys.requiredField.tr(),
-                                        'email':
-                                            'The email value must be a valid email'
-                                      },
-                                      decoration: InputDecoration(
-                                          labelText: 'Email',
-                                          alignLabelWithHint: true),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    ReactiveTextField(
-                                      formControlName: 'password',
-                                      validationMessages: (control) => {
-                                        'required':
-                                            LocaleKeys.requiredField.tr(),
-                                      },
-                                      decoration: InputDecoration(
-                                          labelText: 'Password',
-                                          alignLabelWithHint: true),
-                                    ),
-                                  ],
-                                ),
-                                isActive: store.currentStep == 0),
-                            Step(
-                              title: Text('Security & Domain',
-                                  style: theme.textTheme.subtitle1),
-                              content: Column(
-                                children: [
-                                  Text(
-                                    'Your Work Domain',
-                                    style: theme.textTheme.bodyText1!
-                                        .copyWith(color: theme.primaryColor),
+                                      Spacer(),
+                                      TextButton(
+                                          onPressed: store.checkValidation()
+                                              ? (){
+                                            setState(() {
+                                              details.onStepContinue!();
+                                            });
+                                          }
+                                              : null,
+                                          child: Text(
+                                              store.currentStep != 2 ? 'Continue' : 'Sign Up',
+                                              style: theme.textTheme.bodyText1!.copyWith(
+                                                  color: AppColors.primary, fontSize: 15)))
+                                    ],
                                   ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Wrap(
-                                      children: store.workDomains
-                                          .map((domain) => InkWell(
-                                                child: ReactiveFormConsumer(
-                                                    builder:
-                                                        (context, form, child) {
+                                );
+                              },
+                              onStepTapped: (index) => store.changeCurrenStep(index),
+                              onStepCancel: () => store.changeCurrenStep(store.currentStep - 1),
+                              onStepContinue: () {
+                                if (store.currentStep == 2)
+                                  store.signUp();
+                                else
+                                  store.changeCurrenStep(store.currentStep + 1);
+                              },
+                              steps: [
+                                Step(
+                                    title: Text('Basic Info', style: theme.textTheme.subtitle1),
+                                    content: Column(
+                                      children: [
+                                        ReactiveTextField(
+                                          formControlName: 'firstName',
+                                          validationMessages: (control) => {
+                                            'required': LocaleKeys.requiredField.tr(),
+                                          },
+                                          decoration: InputDecoration(
+                                              labelText: 'First Name', alignLabelWithHint: true),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ReactiveTextField(
+                                          formControlName: 'lastName',
+                                          validationMessages: (control) => {
+                                            'required': LocaleKeys.requiredField.tr(),
+                                          },
+                                          decoration: InputDecoration(
+                                              labelText: 'Last Name', alignLabelWithHint: true),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ReactiveTextField(
+                                          formControlName: 'email',
+                                          validationMessages: (control) => {
+                                            'required': LocaleKeys.requiredField.tr(),
+                                            'email': 'The email value must be a valid email'
+                                          },
+                                          decoration: InputDecoration(
+                                              labelText: 'Email', alignLabelWithHint: true),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ReactiveTextField(
+                                          formControlName: 'password',
+                                          validationMessages: (control) => {
+                                            'required': LocaleKeys.requiredField.tr(),
+                                          },
+                                          decoration: InputDecoration(
+                                              labelText: 'Password', alignLabelWithHint: true),
+                                        ),
+                                      ],
+                                    ),
+                                    isActive: store.currentStep == 0),
+                                Step(
+                                  title:
+                                  Text('Security & Domain', style: theme.textTheme.subtitle1),
+                                  content: Column(
+                                    children: [
+                                      Text(
+                                        'Your Work Domain',
+                                        style: theme.textTheme.bodyText1!
+                                            .copyWith(color: theme.primaryColor),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Wrap(
+                                          children: store.workDomains
+                                              .map((domain) => InkWell(
+                                            child: ReactiveFormConsumer(
+                                                builder: (context, form, child) {
                                                   return Chip(
-                                                      backgroundColor: form
-                                                                  .control(
-                                                                      'workDomain')
-                                                                  .value ==
-                                                              domain
+                                                      backgroundColor:
+                                                      form.control('workDomain').value ==
+                                                          domain
                                                           ? AppColors.primary
                                                           : null,
                                                       label: Text(domain.text,
-                                                          style: theme.textTheme
-                                                              .bodyText2!
+                                                          style: theme.textTheme.bodyText2!
                                                               .copyWith(
-                                                                  color: form.control('workDomain').value ==
-                                                                          domain
-                                                                      ? AppColors
-                                                                          .white
-                                                                      : null)));
+                                                              color: form
+                                                                  .control(
+                                                                  'workDomain')
+                                                                  .value ==
+                                                                  domain
+                                                                  ? AppColors.white
+                                                                  : null)));
                                                 }),
-                                                onTap: () {
-                                                  store.setWorkDomain(domain);
-                                                },
-                                              ))
-                                          .toList(),
-                                      spacing: 5),
-                                  SizedBox(
-                                    height: 10,
+                                            onTap: () {
+                                              store.setWorkDomain(domain);
+                                            },
+                                          ))
+                                              .toList(),
+                                          spacing: 5),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        height: 100,
+                                        child: ReactiveTextField(
+                                          expands: true,
+                                          formControlName: 'bio',
+                                          maxLines: null,
+                                          minLines: null,
+                                          validationMessages: (control) => {
+                                            'required': LocaleKeys.requiredField.tr(),
+                                          },
+                                          decoration: InputDecoration(
+                                              labelText: 'Bio', alignLabelWithHint: true),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      ReactiveTextField(
+                                        formControlName: 'functionalName',
+                                        validationMessages: (control) => {
+                                          'required': LocaleKeys.requiredField.tr(),
+                                        },
+                                        decoration: InputDecoration(
+                                            labelText: 'Functional Name',
+                                            alignLabelWithHint: true),
+                                      ),
+                                    ],
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                   ),
-                                  Container(
-                                    height: 100,
-                                    child: ReactiveTextField(
-                                      expands: true,
-                                      formControlName: 'bio',
-                                      maxLines: null,
-                                      minLines: null,
-                                      validationMessages: (control) => {
-                                        'required':
-                                            LocaleKeys.requiredField.tr(),
-                                      },
-                                      decoration: InputDecoration(
-                                          labelText: 'Bio',
-                                          alignLabelWithHint: true),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  ReactiveTextField(
-                                    formControlName: 'functionalName',
-                                    validationMessages: (control) => {
-                                      'required': LocaleKeys.requiredField.tr(),
-                                    },
-                                    decoration: InputDecoration(
-                                        labelText: 'Functional Name',
-                                        alignLabelWithHint: true),
-                                  ),
-                                ],
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                              ),
-                              isActive: store.currentStep == 1,
-                            )
-                          ]),
+                                  isActive: store.currentStep == 1,
+                                ),
+                                Step(
+                                  title: Text('Cover & profile images',
+                                      style: theme.textTheme.subtitle1),
+                                  content: imagesStep(context),
+                                  isActive: store.currentStep == 2,
+                                )
+                              ]);
+                        },
+
+                      ),
                     ),
                   );
                 }),
               )
             ]),
       ),
+    );
+  }
+
+  Widget imagesStep(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            Container(
+              height: 150,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: store.coverImage == null
+                          ? AssetImage(Assets.assetsCoverImage)
+                          : Image.file(store.coverImage!).image)),
+            ),
+            InkWell(
+              onTap: () {
+                store.getCoverFile();
+              },
+              child: Container(
+                height: 150,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        InkWell(
+          onTap: () {
+            store.getProfileFile();
+          },
+          child: Container(
+            width: 90,
+            height: 90,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: store.profileImage == null
+                        ? Image.asset(Assets.assetsProfile).image
+                        : Image.file(
+                            store.profileImage!,
+                            fit: BoxFit.contain,
+                          ).image)),
+          ),
+        ),
+      ],
     );
   }
 }

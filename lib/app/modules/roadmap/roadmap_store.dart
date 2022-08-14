@@ -62,7 +62,8 @@ abstract class RoadmapStoreBase with Store {
     final res = await navigateToScheduler();
     log("res is $res");
     if (res == true) {
-      _roadmapRepo.startLearnRoadmap(roadmapId).then((value) {
+      _roadmapRepo.startLearnRoadmap(roadmapId).then((value) async {
+        await getData();
         continueLearning();
       });
     }
@@ -73,7 +74,8 @@ abstract class RoadmapStoreBase with Store {
   }
 
   Future<bool?> navigateToScheduler() async {
-    final res = await Modular.to.pushNamed('/home/scheduler/', arguments: [roadmapId]);
+    final res = await Modular.to
+        .pushNamed('/home/profile/scheduler/', arguments: [roadmapId], forRoot: true);
     return res as bool?;
   }
 

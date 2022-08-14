@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -23,13 +25,6 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         body: Observer(builder: (context) {
-          store.company?.coverImage =
-              "http://c.files.bbci.co.uk/136D7/production/_121257597_mediaitem121257596.jpg";
-          store.company?.logo =
-              "https://yt3.ggpht.com/AAnXC4o1n8BKDsO5l6Uc71rf7WOJjm2-aUHzkvyp9vGYB5F4UtXWTecVzvPOBCFK0bNYsZlD7Hk=s900-c-k-c0x00ffffff-no-rj";
-          store.company?.workHours = "13";
-          store.company?.timeZone = "UTC + 2";
-
           return ComponentTemplate(
             state: store.pageState,
             onRetry: () => store.getData(store.companyId),
@@ -69,7 +64,7 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
             height: 10,
           ),
           Text(
-            "orem Ipsum is simply dummy text of the printing and typesetting industorem Ipsum is simply dummy text of the printing and typesetting industorem Ipsum is simply dummy text of the printing and typesetting industorem Ipsum is simply dummy text of the printing and typesetting industorem Ipsum is simply dummy text of the printing and typesetting industorem Ipsum is simply dummy text of the printing and typesetting industorem Ipsum is simply dummy text of the printing and typesetting industLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            store.company?.about ?? "",
             style: theme.textTheme.bodyText2,
           ),
           SizedBox(
@@ -118,7 +113,7 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                   SizedBox(
                     height: 20,
                   ),
-                  _buildInfoItem(context, " Work Hours",
+                  _buildInfoItem(context, "Work Hours",
                       (store.company?.workHours?.toString() ?? 10.toString())),
                 ]),
               ),
@@ -129,6 +124,7 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
   }
 
   Widget _buildDepts(BuildContext context) {
+
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -147,25 +143,24 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
             height: 30,
           ),
           SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
+            scrollDirection: Axis.vertical,
+            child: Wrap(
               children: store.departments
                   .map((dept) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
                           onTap: () {
                             store.goToDeptDetails(dept);
                           },
                           child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            elevation: 5,
-                            child: Container(
-                                width: (MediaQuery.of(context).size.width / 2) - 30,
-                                height: 250,
-                                child: Stack(
-                                  children: [
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              elevation: 5,
+                              child: Container(
+                                  width: 150,
+                                  height: 200,
+                                  child: Stack(children: [
                                     Container(
                                       height: double.infinity,
                                       width: double.infinity,
@@ -185,33 +180,26 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            dept.name,
-                                            style: theme.textTheme.bodyText1!.copyWith(
-                                                fontSize: 16, color: AppColors.white),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              dept.description,
-                                              style: theme.textTheme.bodyText2!.copyWith(
-                                                  color: AppColors.white.withOpacity(0.8)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        ),
-                      ))
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                dept.name,
+                                                style: theme.textTheme.bodyText1!.copyWith(
+                                                    fontSize: 16, color: AppColors.white),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Flexible(
+                                                  child: Text(dept.description,
+                                                      style: theme.textTheme.bodyText2!
+                                                          .copyWith(
+                                                              color: AppColors.white
+                                                                  .withOpacity(0.8))))
+                                            ]))
+                                  ]))))))
                   .toList(),
             ),
           )
@@ -222,18 +210,21 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
 
   Widget _buildInfoItem(BuildContext context, String title, String text) {
     final theme = Theme.of(context);
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          title,
-          style: theme.textTheme.bodyText2!.copyWith(fontSize: 24, color: theme.primaryColor),
+        Container(
+          width: 120,
+          child: Text(
+            title + ": ",
+            style:
+                theme.textTheme.bodyText2!.copyWith(fontSize: 16, color: theme.primaryColor),
+          ),
         ),
         Text(
           text,
           style: theme.textTheme.bodyText2!.copyWith(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
       ],
@@ -373,6 +364,16 @@ class _CompanyPageState extends ModularState<CompanyPage, CompanyStore> {
                     icon: Icon(Icons.arrow_back, color: AppColors.white, size: 25),
                     onPressed: () {
                       Modular.to.pop();
+                    }))),
+        Positioned(
+            right: 5,
+            child: Container(
+                width: 60,
+                height: 60,
+                child: IconButton(
+                    icon: Icon(Icons.report_sharp, color: AppColors.white, size: 25),
+                    onPressed: () {
+                      store.reportCompany(context, store.companyId);
                     }))),
         Positioned(
             bottom: 0,

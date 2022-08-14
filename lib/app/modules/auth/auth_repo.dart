@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:roadmap/app/shared/models/user.dart';
@@ -23,10 +24,25 @@ class AuthRepo {
     }
   }
 
-  Future<bool> signup(Map<String, dynamic> data) async {
+  Future<bool> signup(Map<String, dynamic> data,
+      {File? coverImage, File? personalImage}) async {
     try {
-      final map = {...data};
-      map['workDomain'] = map['workDomain'].toJson();
+      Map<String, dynamic> dataToSend = {...data};
+      final workDomain = dataToSend['workDomain'].toJson();
+      log("workDomain ${workDomain}");
+
+      dataToSend.removeWhere((key, value) => key == 'workDomain');
+      log("data to send is ${dataToSend}");
+      final map = FormData.fromMap({
+        ...dataToSend,
+        'workDomain': jsonEncode(workDomain),
+        'personalImage':
+            personalImage == null ? null : await MultipartFile.fromFile(personalImage.path),
+        'coverImage':
+            coverImage == null ? null : await MultipartFile.fromFile(coverImage.path)
+      });
+
+      log("final map is ${map.fields}");
       final result = await _dio.post("auth/learner/local/signup", data: map);
       final user = userFromJson(json.encode(result.data));
       await SharedPreferencesHelper.setUser(user);
@@ -38,11 +54,9 @@ class AuthRepo {
   }
 
   Future<bool> login(Map<String, dynamic> data) async {
-
-      final result = await _dio.post("auth/learner/local/signin", data: data);
-      final user = userFromJson(json.encode(result.data));
-      await SharedPreferencesHelper.setUser(user);
-      return true;
-
+    final result = await _dio.post("auth/learner/local/signin", data: data);
+    final user = userFromJson(json.encode(result.data));
+    await SharedPreferencesHelper.setUser(user);
+    return true;
   }
 }

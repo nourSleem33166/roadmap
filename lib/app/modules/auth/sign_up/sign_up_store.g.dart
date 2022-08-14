@@ -41,12 +41,60 @@ mixin _$SignUpStore on SignUpStoreBase, Store {
     });
   }
 
+  late final _$profileImageAtom =
+      Atom(name: 'SignUpStoreBase.profileImage', context: context);
+
+  @override
+  File? get profileImage {
+    _$profileImageAtom.reportRead();
+    return super.profileImage;
+  }
+
+  @override
+  set profileImage(File? value) {
+    _$profileImageAtom.reportWrite(value, super.profileImage, () {
+      super.profileImage = value;
+    });
+  }
+
+  late final _$coverImageAtom =
+      Atom(name: 'SignUpStoreBase.coverImage', context: context);
+
+  @override
+  File? get coverImage {
+    _$coverImageAtom.reportRead();
+    return super.coverImage;
+  }
+
+  @override
+  set coverImage(File? value) {
+    _$coverImageAtom.reportWrite(value, super.coverImage, () {
+      super.coverImage = value;
+    });
+  }
+
   late final _$getDomainsAsyncAction =
       AsyncAction('SignUpStoreBase.getDomains', context: context);
 
   @override
   Future<List<WorkDomain>> getDomains() {
     return _$getDomainsAsyncAction.run(() => super.getDomains());
+  }
+
+  late final _$getCoverFileAsyncAction =
+      AsyncAction('SignUpStoreBase.getCoverFile', context: context);
+
+  @override
+  Future<dynamic> getCoverFile() {
+    return _$getCoverFileAsyncAction.run(() => super.getCoverFile());
+  }
+
+  late final _$getProfileFileAsyncAction =
+      AsyncAction('SignUpStoreBase.getProfileFile', context: context);
+
+  @override
+  Future<dynamic> getProfileFile() {
+    return _$getProfileFileAsyncAction.run(() => super.getProfileFile());
   }
 
   late final _$SignUpStoreBaseActionController =
@@ -78,7 +126,9 @@ mixin _$SignUpStore on SignUpStoreBase, Store {
   String toString() {
     return '''
 signUpState: ${signUpState},
-currentStep: ${currentStep}
+currentStep: ${currentStep},
+profileImage: ${profileImage},
+coverImage: ${coverImage}
     ''';
   }
 }

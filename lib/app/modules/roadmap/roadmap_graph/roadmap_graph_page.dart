@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphview/GraphView.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_graph/roadmap_graph_store.dart';
 import 'package:roadmap/app/shared/models/roadmap_node.dart';
@@ -27,14 +28,7 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: (){
-
-          },child: Text('Download Certificate'),
-        ),
-
-        body: Observer(builder: (context) {
+    return Scaffold(body: Observer(builder: (context) {
       return ComponentTemplate(
           state: store.pageState,
           screen: Stack(children: [
@@ -54,11 +48,13 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text("${store.roadmap!.title} Roadmap ",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold)),
+                  Flexible(
+                    child: Text("${store.roadmap!.title} Roadmap ",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontWeight: FontWeight.bold)),
+                  ),
                   Spacer(),
                   ElevatedButton(
                       onPressed: () {
@@ -100,7 +96,7 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
 
   Widget sectionNode(BuildContext context, RoadmapNode node) {
     return InkWell(
-      onLongPress: store.isLearningMode
+      onLongPress: store.isLearningMode && node.isPassed == false
           ? () {
               store.makeExam(context, node);
             }
@@ -147,6 +143,28 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
               )),
             )),
+            Visibility(
+              visible: node.isPassed == true,
+              child: Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: AppColors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(15)),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: node.isPassed == true,
+              child: Positioned(
+                right: 10,
+                top: 5,
+                child: Icon(
+                  FontAwesomeIcons.circleCheck,
+                  color: AppColors.white.withOpacity(0.6),
+                  size: 20,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -164,7 +182,7 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
 
   Widget leafNode(BuildContext context, RoadmapNode node) {
     return InkWell(
-        onLongPress: store.isLearningMode
+        onLongPress: store.isLearningMode && node.isPassed == false
             ? () {
                 store.makeExam(context, node);
               }
@@ -198,50 +216,91 @@ class _RoadmapGraphPageState extends State<RoadmapGraphPage> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                              )))))
+                              ))))),
+              Visibility(
+                visible: node.isPassed == true,
+                child: Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: AppColors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: node.isPassed == true,
+                child: Positioned(
+                  right: 10,
+                  top: 5,
+                  child: Icon(
+                    FontAwesomeIcons.circleCheck,
+                    color: AppColors.white.withOpacity(0.6),
+                    size: 20,
+                  ),
+                ),
+              ),
             ])));
   }
 
   Widget roadmapNode(BuildContext context, RoadmapNode node) {
-    return Opacity(
-      opacity: node.isPassed != null && node.isPassed! ? 0.5 : 1,
-      child: InkWell(
-        onTap: () {
-          store.showNodeDialog(context, node);
-        },
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          color: Color(0xffeb5353),
-          child: Stack(
-            children: [
-              Positioned(
-                right: 1,
-                left: 1,
-                top: 5,
-                child: Opacity(
-                    opacity: 0.3,
-                    child: Image.asset(
-                      Assets.assetsTrack,
-                      width: 55,
-                      height: 55,
-                    )),
-              ),
-              Container(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
-                child: Center(
-                    child: Text(
-                  node.label,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )),
+    return InkWell(
+      onTap: () {
+        store.showNodeDialog(context, node);
+      },
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        color: Color(0xffeb5353),
+        child: Stack(
+          children: [
+            Positioned(
+              right: 1,
+              left: 1,
+              top: 5,
+              child: Opacity(
+                  opacity: 0.3,
+                  child: Image.asset(
+                    Assets.assetsTrack,
+                    width: 55,
+                    height: 55,
+                  )),
+            ),
+            Container(
+                child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
+              child: Center(
+                  child: Text(
+                node.label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               )),
-            ],
-          ),
+            )),
+            Visibility(
+              visible: node.isPassed == true,
+              child: Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: AppColors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(15)),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: node.isPassed == true,
+              child: Positioned(
+                right: 10,
+                top: 5,
+                child: Icon(
+                  FontAwesomeIcons.circleCheck,
+                  color: AppColors.white.withOpacity(0.6),
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

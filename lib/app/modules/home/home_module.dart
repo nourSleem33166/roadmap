@@ -4,13 +4,13 @@ import 'package:roadmap/app/modules/company/company_module.dart';
 import 'package:roadmap/app/modules/explore/explore_page.dart';
 import 'package:roadmap/app/modules/explore/explore_repo.dart';
 import 'package:roadmap/app/modules/notifications/notifications_page.dart';
-import 'package:roadmap/app/modules/profile/profile_page.dart';
+import 'package:roadmap/app/modules/profile/profile_module.dart';
+import 'package:roadmap/app/modules/profile/profile_repo.dart';
 import 'package:roadmap/app/modules/profile/profile_store.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_module.dart';
 import 'package:roadmap/app/modules/roadmap/roadmap_repo.dart';
 import 'package:roadmap/app/modules/scheduler/scheduler_module.dart';
 import 'package:roadmap/app/modules/scheduler/scheduler_repo.dart';
-import 'package:roadmap/app/modules/scheduler/scheduler_store.dart';
 import 'package:roadmap/app/shared/repos/follow_process_repo.dart';
 
 import '../company/company_repo.dart';
@@ -26,12 +26,12 @@ class HomeModule extends Module {
     Bind((i) => RoadmapRepo(i.get<Dio>())),
     Bind.lazySingleton((i) => HomeStore()),
     Bind((i) => ExploreStore(i.get<ExploreRepo>(), i.get<RoadmapRepo>())),
-    Bind((i) => ProfileStore()),
+    Bind((i) => ProfileRepo(i.get<Dio>())),
+    Bind((i) => ProfileStore(i.get<ProfileRepo>())),
     Bind((i) => NotificationsStore()),
     Bind((i) => CompanyRepo(i.get<Dio>())),
     Bind((i) => FollowProcessRepo(i.get<Dio>())),
     Bind((i) => SchedulerRepo(i.get<Dio>())),
-
   ];
 
   @override
@@ -45,16 +45,13 @@ class HomeModule extends Module {
         '/notifications/',
         child: (_, args) => NotificationsPage(),
       ),
-      ChildRoute(
+      ModuleRoute(
         '/profile/',
-        child: (_, args) => ProfilePage(),
+        module: ProfileModule(),
       )
     ]),
     ModuleRoute('/companyDetails/', module: CompanyModule()),
     ModuleRoute('/roadmapDetails/', module: RoadmapModule()),
-    ModuleRoute(
-      '/scheduler/',
-      module: SchedulerModule(),
-    )
+
   ];
 }

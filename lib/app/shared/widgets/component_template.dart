@@ -18,7 +18,7 @@ class ComponentTemplate extends StatelessWidget {
         return screen;
       case ComponentState.FETCHING_DATA:
         return Container(
-            height: 250, child: Center(child: CircularProgressIndicator()));
+            height: 150, child: Center(child: CircularProgressIndicator()));
       case ComponentState.NO_DATA:
         return Center(child: Text(LocaleKeys.emptyData.tr()));
       case ComponentState.ERROR:

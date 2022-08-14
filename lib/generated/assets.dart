@@ -4,6 +4,7 @@ class Assets {
 
   static const String assetsAngry = 'assets/angry.gif';
   static const String assetsBackground = 'assets/background.png';
+  static const String assetsCoverImage = 'assets/cover_image.png';
   static const String assetsHaha = 'assets/haha.gif';
   static const String assetsLeaf = 'assets/leaf.png';
   static const String assetsLike = 'assets/like.gif';
@@ -12,10 +13,12 @@ class Assets {
   static const String assetsLogoForeground432x432 = 'assets/logo_foreground_432x432.png';
   static const String assetsLove = 'assets/love.gif';
   static const String assetsPiechart = 'assets/pie-chart.png';
+  static const String assetsProfile = 'assets/profile.png';
   static const String assetsRoadmap = 'assets/roadmap.svg';
   static const String assetsSad = 'assets/sad.gif';
   static const String assetsSignIn = 'assets/sign_in.svg';
   static const String assetsSignup = 'assets/signup.png';
+  static const String assetsTada = 'assets/tada.gif';
   static const String assetsTrack = 'assets/track.png';
   static const String assetsWelcome = 'assets/welcome.svg';
   static const String assetsWow = 'assets/wow.gif';

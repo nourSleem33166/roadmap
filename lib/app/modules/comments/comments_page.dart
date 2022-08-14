@@ -149,7 +149,9 @@ class _CommentsPageState extends State<CommentsPage> {
           ? () {
               store.showEditDeleteDialog(context, comment);
             }
-          : null,
+          : () {
+              store.showReportOptionsDialog(context, comment);
+            },
       child: Column(
         children: [
           Row(
